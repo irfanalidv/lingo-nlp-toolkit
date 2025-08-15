@@ -174,10 +174,10 @@ def main():
     summary = summarization_pipeline(long_text)
 
     # Handle different summary output formats
-    if isinstance(summary, list) and len(summary) > 0:
-        summary_text = summary[0]["summary_text"]
-    elif isinstance(summary, dict) and "summary_text" in summary:
+    if isinstance(summary, dict) and "summary_text" in summary:
         summary_text = summary["summary_text"]
+    elif isinstance(summary, list) and len(summary) > 0:
+        summary_text = summary[0]["summary_text"]
     else:
         summary_text = str(summary)
 

@@ -272,10 +272,10 @@ speech, translating languages, making decisions, and solving complex problems.
 """
 
 summary = summarizer(long_text)
-print(f"Summary: {summary[0]['summary_text']}")
+print(f"Summary: {summary['summary_text']}")
 
 # Output:
-# Summary: artificial intelligence (ai) has emerged as one of the most transformative technologies of the 21st century. ai systems can now perform tasks that were once thought to be exclusively human.
+# Summary: artificial intelligence (ai) has emerged as one of the most transformative technologies of the 21st century. it encompasses a wide range of capabilities including machine learning, natural language processing, computer vision, and robotics. ai systems can now perform tasks that were once thought to be exclusively human, such as recognizing speech and translating languages.
 ```
 
 ---
@@ -561,7 +561,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Documentation**: [https://lingo.readthedocs.io](https://lingo.readthedocs.io)
 - **Issues**: [GitHub Issues](https://github.com/irfanalidv/lingo-nlp-toolkit/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/irfanalidv/lingo-nlp-toolkit/discussions)
-- **Email**: irfanali29@hotmail.com
 
 ---
 

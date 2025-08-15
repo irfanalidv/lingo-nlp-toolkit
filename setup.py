@@ -22,7 +22,7 @@ def read_readme():
 long_description = read_readme()
 
 # Version
-version = "0.1.0"
+version = "0.2.1"
 
 # Core requirements
 install_requires = [

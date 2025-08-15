@@ -5,9 +5,25 @@ All notable changes to the Lingo NLP Toolkit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2025-01-15
+
+### Fixed
+
+- **Summarization Output Format**: Corrected README examples to use `summary['summary_text']` instead of `summary[0]['summary_text']`
+- **Documentation Consistency**: Ensured all examples match actual pipeline output behavior
+- **Version Consistency**: Updated all setup files to use version 0.2.2
+- **Example Files**: Enhanced examples to handle both list and dict output formats robustly
+
+### Documentation
+
+- **README.md**: Fixed summarization example to match actual pipeline output
+- **Examples**: Updated to handle different output formats gracefully
+- **Setup Files**: Synchronized all version numbers across setup files
+
 ## [0.2.1] - 2025-01-15
 
 ### Fixed
+
 - **Documentation Updates**: Fixed all remaining old package name references (`lingo` → `lingo-nlp-toolkit`)
 - **Installation Instructions**: Updated all pip install commands throughout documentation
 - **Repository References**: Ensured all GitHub URLs point to the new repository
@@ -102,6 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **0.2.2**: Documentation consistency fixes and summarization output format corrections
 - **0.2.1**: Documentation fixes and package name consistency updates
 - **0.2.0**: Repository migration and PyPI package updates
 - **0.1.0**: Initial release with core NLP capabilities

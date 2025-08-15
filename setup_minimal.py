@@ -18,7 +18,7 @@ def read_readme():
 
 setup(
     name="lingo-nlp-toolkit",
-    version="0.1.0",
+    version="0.2.1",
     author="Md Irfan Ali",
     author_email="irfanali29@hotmail.com",
     description="Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready",
