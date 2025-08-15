@@ -1,3 +1,38 @@
+Metadata-Version: 2.1
+Name: lingo-nlp-toolkit
+Version: 0.1.0
+Summary: Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready
+Home-page: https://github.com/irfanalidv/Lingo
+Author: Md Irfan Ali
+Author-email: irfanali29@hotmail.com
+Keywords: nlp,natural language processing,transformers,bert,gpt,machine learning,ai
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Text Processing :: Linguistic
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE.temp
+Requires-Dist: torch>=1.9.0
+Requires-Dist: transformers>=4.20.0
+Requires-Dist: spacy>=3.4.0
+Requires-Dist: nltk>=3.7
+Requires-Dist: scikit-learn>=1.0.0
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: pandas>=1.3.0
+Requires-Dist: tqdm>=4.62.0
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: sentence-transformers>=2.2.0
+
 # **Lingo: Advanced NLP Toolkit**
 
 **Lightweight, Fast, and Transformer-Ready**

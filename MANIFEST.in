@@ -1,0 +1,48 @@
+# Include README and documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+include INSTALLATION.md
+include QUICKSTART.md
+include CAPABILITIES.md
+include requirements.txt
+include pyproject.toml
+
+# Include package data
+recursive-include lingo/configs *.yaml *.yml
+recursive-include lingo/models *.json
+recursive-include lingo/data *.txt
+
+# Include examples
+recursive-include examples *.py
+recursive-include tests *.py
+
+# Include configuration files
+include .gitignore
+include Makefile
+include setup.py
+
+# Include type hints
+recursive-include lingo *.pyi
+include lingo/py.typed
+
+# Exclude unnecessary files
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude __pycache__
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude .git
+global-exclude .gitignore
+global-exclude .pytest_cache
+global-exclude .coverage
+global-exclude htmlcov
+global-exclude .tox
+global-exclude .venv
+global-exclude venv
+global-exclude env
+global-exclude .env
+global-exclude *.egg-info
+global-exclude dist
+global-exclude build
