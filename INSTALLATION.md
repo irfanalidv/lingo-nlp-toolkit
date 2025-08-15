@@ -7,11 +7,15 @@ Lingo is designed to be **install-and-use** - no manual setup required! When you
 ## **Quick Installation**
 
 ### **Option 1: Install from PyPI (Recommended)**
+
 ```bash
 pip install lingo-nlp-toolkit
 ```
 
+**📦 PyPI Package**: [lingo-nlp-toolkit on PyPI](https://pypi.org/project/lingo-nlp-toolkit/#files)
+
 ### **Option 2: Install from Source**
+
 ```bash
 git clone https://github.com/irfanalidv/lingo-nlp-toolkit.git
 cd lingo-nlp-toolkit
@@ -31,6 +35,7 @@ When you install Lingo, it automatically:
 ## **First-Time Usage**
 
 ### **Automatic Setup (Recommended)**
+
 Simply import Lingo and it will set up everything automatically:
 
 ```python
@@ -41,6 +46,7 @@ nlp = Pipeline(task="sentiment-analysis", model="cardiffnlp/twitter-roberta-base
 ```
 
 ### **Manual Setup (Optional)**
+
 If you prefer to set up manually or want to re-download data:
 
 ```bash
@@ -54,15 +60,18 @@ lingo setup --force
 ## **What Gets Downloaded**
 
 ### **spaCy Models**
+
 - `en_core_web_sm` - English language model for text processing
 
 ### **NLTK Data**
+
 - `punkt` - Sentence and word tokenization
 - `stopwords` - Common stop words
 - `wordnet` - Lexical database for lemmatization
 - `punkt_tab` - Advanced tokenization rules
 
 ### **Transformer Models**
+
 - `bert-base-uncased` - Base BERT model
 - `distilbert-base-uncased` - Distilled BERT model
 - `cardiffnlp/twitter-roberta-base-sentiment-latest` - Sentiment analysis
@@ -88,22 +97,29 @@ lingo list-models
 ### **Common Issues**
 
 #### **1. Out of Disk Space**
+
 Lingo downloads several GB of models. Ensure you have at least 5GB free space.
 
 #### **2. Network Issues**
+
 If downloads fail, run the setup manually:
+
 ```bash
 lingo setup
 ```
 
 #### **3. Permission Issues**
+
 On some systems, you might need:
+
 ```bash
 pip install --user lingo
 ```
 
 #### **4. Missing Dependencies**
+
 If you get import errors:
+
 ```bash
 pip install --upgrade pip
 pip install lingo-nlp-toolkit[full]
@@ -156,12 +172,14 @@ make test
 ## **System Requirements**
 
 ### **Minimum Requirements**
+
 - **Python**: 3.9 or higher
 - **RAM**: 4GB minimum, 8GB recommended
 - **Disk**: 5GB free space
 - **OS**: Windows 10+, macOS 10.14+, or Linux
 
 ### **Recommended Requirements**
+
 - **Python**: 3.11 or higher
 - **RAM**: 16GB or more
 - **Disk**: 10GB free space
@@ -170,6 +188,7 @@ make test
 ## **Performance Optimization**
 
 ### **GPU Support**
+
 ```bash
 # Install with GPU support
 pip install lingo-nlp-toolkit[gpu]
@@ -179,6 +198,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 ```
 
 ### **Memory Optimization**
+
 ```bash
 # Use smaller models for limited memory
 lingo run sentiment-analysis --model distilbert-base-uncased --text "Your text here"

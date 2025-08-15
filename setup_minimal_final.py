@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="lingo-nlp-toolkit",
-    version="0.2.2",
+    version="2.3",
     author="Md Irfan Ali",
     author_email="irfanali29@hotmail.com",
     description="Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready",

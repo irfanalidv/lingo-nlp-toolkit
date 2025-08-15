@@ -7,6 +7,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 ## **🎯 Core Capabilities**
 
 ### **1. Text Preprocessing & Normalization**
+
 - **Unicode Normalization**: NFC, NFD, NFKC, NFKD
 - **Text Cleaning**: Lowercasing, punctuation removal, special character handling
 - **Contraction Expansion**: "I'm" → "I am", "don't" → "do not"
@@ -20,6 +21,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 ### **2. Core NLP Tasks**
 
 #### **Sentiment Analysis**
+
 - **Binary Classification**: Positive/Negative
 - **Multi-class**: Positive/Negative/Neutral
 - **Fine-grained**: Emotion detection, intensity scoring
@@ -27,6 +29,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 - **Confidence Scoring**: Reliability metrics for predictions
 
 #### **Named Entity Recognition (NER)**
+
 - **Entity Types**: Person, Organization, Location, Date, Time, Money
 - **Custom Entities**: Domain-specific entity recognition
 - **Entity Linking**: Connect entities to knowledge bases
@@ -34,6 +37,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 - **Confidence Scoring**: Entity detection reliability
 
 #### **Text Classification**
+
 - **Multi-class Classification**: Categorize text into predefined classes
 - **Multi-label Classification**: Assign multiple labels to text
 - **Custom Categories**: Train on domain-specific categories
@@ -41,6 +45,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 - **Explainability**: LIME/SHAP integration for model interpretability
 
 #### **Text Embeddings**
+
 - **Transformer-based**: BERT, RoBERTa, DistilBERT, LLaMA
 - **Sentence Embeddings**: Sentence-BERT, Universal Sentence Encoder
 - **Classical Methods**: TF-IDF, Word2Vec, FastText, GloVe
@@ -49,6 +54,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 - **Clustering**: Text clustering and topic modeling
 
 #### **Question Answering**
+
 - **Extractive QA**: Find answers within given context
 - **Open-domain QA**: Answer questions from knowledge base
 - **Context-aware**: Understand context and generate relevant answers
@@ -56,6 +62,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 - **Confidence Scoring**: Answer reliability metrics
 
 #### **Text Summarization**
+
 - **Extractive**: Select key sentences from text
 - **Abstractive**: Generate new summary text
 - **Length Control**: Customizable summary length
@@ -65,6 +72,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 ### **3. Advanced Features**
 
 #### **Pipeline Management**
+
 - **Modular Design**: Mix and match preprocessing and model components
 - **Configuration Management**: YAML/JSON configuration files
 - **Caching**: Intelligent result caching for performance
@@ -72,6 +80,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 - **Pipeline Persistence**: Save and load complete pipelines
 
 #### **Performance & Scalability**
+
 - **GPU Support**: CUDA, MPS, and CPU acceleration
 - **Multi-core Processing**: Parallel text processing
 - **Memory Optimization**: Efficient tokenization and processing
@@ -79,6 +88,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 - **Resource Management**: Automatic device selection
 
 #### **Model Management**
+
 - **Hugging Face Integration**: Load, run, fine-tune, export models
 - **Model Caching**: Automatic model downloading and caching
 - **Version Control**: Model version management
@@ -88,6 +98,7 @@ Lingo is a comprehensive, lightweight, fast, and transformer-ready Natural Langu
 ## **🏢 Enterprise Use Cases**
 
 ### **1. Customer Feedback Analysis**
+
 ```python
 from lingo import Pipeline, TextPreprocessor
 
@@ -107,6 +118,7 @@ priority = 'high' if sentiment == 'NEGATIVE' and confidence > 0.8 else 'normal'
 ```
 
 ### **2. Document Intelligence**
+
 ```python
 from lingo import Pipeline
 
@@ -125,6 +137,7 @@ people = [e['word'] for e in entities if e['entity_group'] == 'PER']
 ```
 
 ### **3. Content Recommendation**
+
 ```python
 from lingo import Pipeline
 import numpy as np
@@ -151,6 +164,7 @@ recommendations = sorted(similarities, key=lambda x: x[1], reverse=True)
 ```
 
 ### **4. Social Media Monitoring**
+
 ```python
 from lingo import Pipeline
 
@@ -170,8 +184,8 @@ posts = [
 results = sentiment_pipeline.batch_predict(posts)
 
 # Sample output:
-# [{'label': 'POSITIVE', 'score': 0.988}, 
-#  {'label': 'NEGATIVE', 'score': 0.956}, 
+# [{'label': 'POSITIVE', 'score': 0.988},
+#  {'label': 'NEGATIVE', 'score': 0.956},
 #  {'label': 'NEGATIVE', 'score': 0.901}]
 
 # Analyze trends
@@ -182,13 +196,16 @@ negative_count = sum(1 for r in results if r['label'] == 'NEGATIVE')
 ## **🔧 Technical Capabilities**
 
 ### **1. Auto-Setup & Installation**
+
 - **One-command Installation**: `pip install lingo-nlp-toolkit`
+- **📦 PyPI Package**: [lingo-nlp-toolkit on PyPI](https://pypi.org/project/lingo-nlp-toolkit/#files)
 - **Automatic Data Download**: NLTK, spaCy, transformer models
 - **Environment Setup**: Automatic configuration and validation
 - **Dependency Management**: Smart dependency resolution
 - **GPU Detection**: Automatic CUDA/MPS detection
 
 ### **2. Configuration Management**
+
 ```yaml
 # config.yaml
 preprocessing:
@@ -213,6 +230,7 @@ pipeline:
 ```
 
 ### **3. CLI Interface**
+
 ```bash
 # Set up environment
 lingo setup
@@ -231,6 +249,7 @@ lingo download-model --model bert-base-uncased
 ```
 
 ### **4. Performance Optimization**
+
 - **Batch Processing**: Efficient processing of multiple texts
 - **Model Caching**: Automatic model loading and caching
 - **Memory Management**: Optimized tokenization and processing
@@ -240,6 +259,7 @@ lingo download-model --model bert-base-uncased
 ## **📊 Performance Metrics**
 
 ### **Processing Speed**
+
 - **Text Preprocessing**: 1000+ words/second
 - **Sentiment Analysis**: 50+ texts/second (GPU), 10+ texts/second (CPU)
 - **NER**: 30+ texts/second (GPU), 5+ texts/second (CPU)
@@ -247,12 +267,14 @@ lingo download-model --model bert-base-uncased
 - **Summarization**: 5+ texts/second (GPU), 1+ texts/second (CPU)
 
 ### **Accuracy Benchmarks**
+
 - **Sentiment Analysis**: 95%+ accuracy on standard datasets
 - **NER**: 90%+ F1 score on CoNLL-2003
 - **Text Classification**: 85%+ accuracy on domain-specific tasks
 - **Question Answering**: 80%+ F1 score on SQuAD
 
 ### **Resource Usage**
+
 - **Memory**: 2-8GB RAM depending on model size
 - **Storage**: 1-5GB for models and data
 - **GPU**: 4-16GB VRAM for optimal performance
@@ -261,6 +283,7 @@ lingo download-model --model bert-base-uncased
 ## **🚀 Getting Started**
 
 ### **1. Installation**
+
 ```bash
 # Basic installation
 pip install lingo-nlp-toolkit
@@ -273,6 +296,7 @@ pip install lingo-nlp-toolkit[gpu]
 ```
 
 ### **2. First Use**
+
 ```python
 from lingo import Pipeline
 
@@ -288,6 +312,7 @@ print(f"Sentiment: {result['label']}, Confidence: {result['score']:.3f}")
 ```
 
 ### **3. Examples**
+
 ```bash
 # Basic usage
 python examples/basic_usage.py
@@ -308,6 +333,7 @@ python demo.py
 ## **🔮 Future Roadmap**
 
 ### **Phase 1 (Current)**
+
 - ✅ Core NLP tasks
 - ✅ Text preprocessing
 - ✅ Model management
@@ -315,6 +341,7 @@ python demo.py
 - ✅ CLI interface
 
 ### **Phase 2 (Next)**
+
 - 🔄 Multi-language support
 - 🔄 Custom model training
 - 🔄 Advanced explainability
@@ -322,6 +349,7 @@ python demo.py
 - 🔄 API server
 
 ### **Phase 3 (Future)**
+
 - 📋 Conversational AI
 - 📋 Document understanding
 - 📋 Knowledge graphs

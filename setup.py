@@ -22,7 +22,7 @@ def read_readme():
 long_description = read_readme()
 
 # Version
-version = "0.2.1"
+version = "2.3"
 
 # Core requirements
 install_requires = [
@@ -72,7 +72,7 @@ setup(
     url="https://github.com/irfanalidv/lingo-nlp-toolkit",
     project_urls={
         "Homepage": "https://github.com/irfanalidv/lingo-nlp-toolkit",
-        "Documentation": "https://lingo.readthedocs.io",
+        "Documentation": "https://github.com/irfanalidv/lingo-nlp-toolkit",
         "Repository": "https://github.com/irfanalidv/lingo-nlp-toolkit.git",
         "Bug Tracker": "https://github.com/irfanalidv/lingo-nlp-toolkit/issues",
         "Source Code": "https://github.com/irfanalidv/lingo-nlp-toolkit",

@@ -4,7 +4,8 @@
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PyPI version](https://badge.fury.io/py/lingo.svg)](https://badge.fury.io/py/lingo)
+[![PyPI version](https://badge.fury.io/py/lingo-nlp-toolkit.svg)](https://badge.fury.io/py/lingo-nlp-toolkit)
+[![PyPI Downloads](https://static.pepy.tech/badge/lingo-nlp-toolkit)](https://pepy.tech/projects/lingo-nlp-toolkit)
 
 ## **Overview**
 
@@ -33,6 +34,8 @@ pip install lingo-nlp-toolkit[gpu]
 ```
 
 **✨ Auto-Setup**: Lingo automatically downloads all required NLP data and models on first use!
+
+**📦 PyPI Package**: [lingo-nlp-toolkit on PyPI](https://pypi.org/project/lingo-nlp-toolkit/#files)
 
 ### **Examples & Use Cases**
 
@@ -558,7 +561,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## **📞 Support & Community**
 
-- **Documentation**: [https://lingo.readthedocs.io](https://lingo.readthedocs.io)
+- **Documentation**: [GitHub Repository](https://github.com/irfanalidv/lingo-nlp-toolkit)
 - **Issues**: [GitHub Issues](https://github.com/irfanalidv/lingo-nlp-toolkit/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/irfanalidv/lingo-nlp-toolkit/discussions)
 

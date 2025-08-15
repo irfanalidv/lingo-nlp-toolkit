@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lingo-nlp-toolkit"
-dynamic = ["version"]
+version = "2.3"
 description = "Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready"
 readme = "README.md"
 # license = "MIT"  # Commented out to avoid metadata conflicts
@@ -113,12 +113,12 @@ test = [
 
 [project.urls]
 Homepage = "https://github.com/irfanalidv/lingo-nlp-toolkit"
-Documentation = "https://lingo.readthedocs.io"
+Documentation = "https://github.com/irfanalidv/lingo-nlp-toolkit"
 Repository = "https://github.com/irfanalidv/lingo-nlp-toolkit.git"
 "Bug Tracker" = "https://github.com/irfanalidv/lingo-nlp-toolkit/issues"
 "Source Code" = "https://github.com/irfanalidv/lingo-nlp-toolkit"
 Changelog = "https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CHANGELOG.md"
-"Download" = "https://pypi.org/project/lingo/#files"
+"Download" = "https://pypi.org/project/lingo-nlp-toolkit/#files"
 
 [project.scripts]
 lingo = "lingo.cli:main"

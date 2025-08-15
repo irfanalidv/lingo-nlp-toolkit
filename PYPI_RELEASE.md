@@ -67,7 +67,7 @@ pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://
 make publish
 
 # Verify on PyPI
-# Visit: https://pypi.org/project/lingo/
+# Visit: https://pypi.org/project/lingo-nlp-toolkit/#files
 ```
 
 ### **3. Full Release Process**

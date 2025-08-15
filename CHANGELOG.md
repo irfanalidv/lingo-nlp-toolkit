@@ -5,6 +5,26 @@ All notable changes to the Lingo NLP Toolkit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3] - 2025-01-15
+
+### Added
+
+- **PyPI Downloads Badge**: Added download statistics badge to show package popularity
+- **PyPI Package Links**: Added direct links to PyPI package page with #files section across all documentation
+
+### Fixed
+
+- **PyPI Badge**: Corrected PyPI version badge to point to `lingo-nlp-toolkit` instead of `lingo`
+- **Documentation URLs**: Updated all documentation links from `lingo.readthedocs.io` to GitHub repository
+- **Download URLs**: Fixed all PyPI download links to include #files section for better user experience
+- **Package Consistency**: Ensured all setup files and documentation use consistent package names and URLs
+
+### Documentation
+
+- **README.md**: Updated PyPI badges and package links
+- **All Documentation Files**: Added consistent PyPI package links with #files section
+- **Setup Files**: Synchronized all version numbers and URLs
+
 ## [0.2.2] - 2025-01-15
 
 ### Fixed
@@ -118,6 +138,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **2.3**: **CURRENT** - Comprehensive documentation updates, PyPI badges, and package link fixes
 - **0.2.2**: Documentation consistency fixes and summarization output format corrections
 - **0.2.1**: Documentation fixes and package name consistency updates
 - **0.2.0**: Repository migration and PyPI package updates

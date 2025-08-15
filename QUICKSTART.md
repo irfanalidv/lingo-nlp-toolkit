@@ -15,6 +15,8 @@ Get up and running with Lingo NLP toolkit in minutes!
 ```bash
 # One-command installation
 pip install lingo-nlp-toolkit
+
+**📦 PyPI Package**: [lingo-nlp-toolkit on PyPI](https://pypi.org/project/lingo-nlp-toolkit/#files)
 ```
 
 **✨ Auto-Setup**: Lingo automatically downloads all required NLP data and models on first use!

@@ -1,18 +1,18 @@
 Metadata-Version: 2.1
 Name: lingo-nlp-toolkit
-Version: 0.2.2
+Version: 2.3
 Summary: Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready
 Home-page: https://github.com/irfanalidv/lingo-nlp-toolkit
 Author: Md Irfan Ali
 Author-email: Md Irfan Ali <irfanali29@hotmail.com>
 Maintainer-email: Md Irfan Ali <irfanali29@hotmail.com>
 Project-URL: Homepage, https://github.com/irfanalidv/lingo-nlp-toolkit
-Project-URL: Documentation, https://lingo.readthedocs.io
+Project-URL: Documentation, https://github.com/irfanalidv/lingo-nlp-toolkit
 Project-URL: Repository, https://github.com/irfanalidv/lingo-nlp-toolkit.git
 Project-URL: Bug Tracker, https://github.com/irfanalidv/lingo-nlp-toolkit/issues
 Project-URL: Source Code, https://github.com/irfanalidv/lingo-nlp-toolkit
 Project-URL: Changelog, https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CHANGELOG.md
-Project-URL: Download, https://pypi.org/project/lingo/#files
+Project-URL: Download, https://pypi.org/project/lingo-nlp-toolkit/#files
 Keywords: nlp,natural-language-processing,transformers,bert,machine-learning,ai,text-processing,sentiment-analysis,named-entity-recognition,text-classification,embeddings
 Classifier: Development Status :: 4 - Beta
 Classifier: Intended Audience :: Developers
@@ -102,7 +102,8 @@ Requires-Dist: coverage>=6.0.0; extra == "test"
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PyPI version](https://badge.fury.io/py/lingo.svg)](https://badge.fury.io/py/lingo)
+[![PyPI version](https://badge.fury.io/py/lingo-nlp-toolkit.svg)](https://badge.fury.io/py/lingo-nlp-toolkit)
+[![PyPI Downloads](https://static.pepy.tech/badge/lingo-nlp-toolkit)](https://pepy.tech/projects/lingo-nlp-toolkit)
 
 ## **Overview**
 
@@ -131,6 +132,8 @@ pip install lingo-nlp-toolkit[gpu]
 ```
 
 **✨ Auto-Setup**: Lingo automatically downloads all required NLP data and models on first use!
+
+**📦 PyPI Package**: [lingo-nlp-toolkit on PyPI](https://pypi.org/project/lingo-nlp-toolkit/#files)
 
 ### **Examples & Use Cases**
 
@@ -656,7 +659,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## **📞 Support & Community**
 
-- **Documentation**: [https://lingo.readthedocs.io](https://lingo.readthedocs.io)
+- **Documentation**: [GitHub Repository](https://github.com/irfanalidv/lingo-nlp-toolkit)
 - **Issues**: [GitHub Issues](https://github.com/irfanalidv/lingo-nlp-toolkit/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/irfanalidv/lingo-nlp-toolkit/discussions)
 
