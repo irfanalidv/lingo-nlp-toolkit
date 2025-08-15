@@ -7,13 +7,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="lingo-nlp-toolkit",
-    version="0.1.0",
+    version="0.2.1",
     author="Md Irfan Ali",
     author_email="irfanali29@hotmail.com",
     description="Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/irfanalidv/Lingo",
+    url="https://github.com/irfanalidv/lingo-nlp-toolkit",
     packages=find_packages(),
     python_requires=">=3.9",
     install_requires=[
@@ -49,5 +49,10 @@ setup(
         "Topic :: Text Processing :: Linguistic",
     ],
     keywords="nlp, natural language processing, transformers, bert, gpt, machine learning, ai",
+    project_urls={
+        "Bug Reports": "https://github.com/irfanalidv/lingo-nlp-toolkit/issues",
+        "Source": "https://github.com/irfanalidv/lingo-nlp-toolkit",
+        "Documentation": "https://github.com/irfanalidv/lingo-nlp-toolkit#readme",
+    },
     zip_safe=False,
 )

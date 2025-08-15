@@ -17,14 +17,14 @@ def read_readme():
 
 
 setup(
-    name="lingo",
+    name="lingo-nlp-toolkit",
     version="0.1.0",
     author="Md Irfan Ali",
     author_email="irfanali29@hotmail.com",
     description="Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/irfanalidv/Lingo",
+    url="https://github.com/irfanalidv/lingo-nlp-toolkit",
     packages=find_packages(),
     python_requires=">=3.9",
     install_requires=[

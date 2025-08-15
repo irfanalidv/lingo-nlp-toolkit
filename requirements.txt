@@ -18,7 +18,7 @@ uvicorn>=0.20.0
 pydantic>=1.10.0
 sentence-transformers>=2.2.0
 
-# Optional Dependencies (install with pip install lingo[full])
+# Optional Dependencies (install with pip install lingo-nlp-toolkit[full])
 # pdfplumber>=0.7.0
 # python-docx>=0.8.11
 # openpyxl>=3.0.10
@@ -32,7 +32,7 @@ sentence-transformers>=2.2.0
 # textstat>=0.7.3
 # language-tool-python>=2.7.1
 
-# Development Dependencies (install with pip install lingo[dev])
+# Development Dependencies (install with pip install lingo-nlp-toolkit[dev])
 # pytest>=7.0.0
 # pytest-cov>=4.0.0
 # pytest-mock>=3.10.0
@@ -46,13 +46,13 @@ sentence-transformers>=2.2.0
 # sphinx-rtd-theme>=1.0.0
 # myst-parser>=0.18.0
 
-# Documentation Dependencies (install with pip install lingo[docs])
+# Documentation Dependencies (install with pip install lingo-nlp-toolkit[docs])
 # sphinx>=5.0.0
 # sphinx-rtd-theme>=1.0.0
 # myst-parser>=0.18.0
 # sphinx-autodoc-typehints>=1.19.0
 
-# Testing Dependencies (install with pip install lingo[test])
+# Testing Dependencies (install with pip install lingo-nlp-toolkit[test])
 # pytest>=7.0.0
 # pytest-cov>=4.0.0
 # pytest-mock>=3.10.0

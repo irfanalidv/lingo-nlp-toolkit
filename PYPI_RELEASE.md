@@ -126,22 +126,22 @@ repository = https://test.pypi.org/legacy/
 ### **Installation Commands**
 ```bash
 # Basic installation
-pip install lingo
+pip install lingo-nlp-toolkit
 
 # Full installation with all dependencies
-pip install lingo[full]
+pip install lingo-nlp-toolkit[full]
 
 # Development installation
-pip install lingo[dev]
+pip install lingo-nlp-toolkit[dev]
 
 # GPU support
-pip install lingo[gpu]
+pip install lingo-nlp-toolkit[gpu]
 
 # Documentation dependencies
-pip install lingo[docs]
+pip install lingo-nlp-toolkit[docs]
 
 # Testing dependencies
-pip install lingo[test]
+pip install lingo-nlp-toolkit[test]
 ```
 
 ## **🧪 Testing the Release**
@@ -149,7 +149,7 @@ pip install lingo[test]
 ### **1. TestPyPI Testing**
 ```bash
 # Install from TestPyPI
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ lingo
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ lingo-nlp-toolkit
 
 # Test basic functionality
 python -c "from lingo import Pipeline; print('TestPyPI installation successful!')"
@@ -164,7 +164,7 @@ python examples/showcase.py
 ### **2. PyPI Testing**
 ```bash
 # Install from PyPI
-pip install lingo
+pip install lingo-nlp-toolkit
 
 # Test all functionality
 make test
@@ -175,7 +175,7 @@ make examples
 
 ### **1. Verification**
 - [ ] Package appears on PyPI
-- [ ] Installation works: `pip install lingo`
+- [ ] Installation works: `pip install lingo-nlp-toolkit`
 - [ ] Import works: `python -c "import lingo"`
 - [ ] CLI works: `lingo --help`
 - [ ] Examples run successfully

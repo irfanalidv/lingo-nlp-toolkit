@@ -47,7 +47,7 @@ install_requires = [
 ]
 
 setup(
-    name="lingo",
+    name="lingo-nlp-toolkit",
     version=version,
     author="Md Irfan Ali",
     author_email="irfanali29@hotmail.com",
@@ -69,14 +69,14 @@ setup(
         "text-classification",
         "embeddings",
     ],
-    url="https://github.com/irfanalidv/Lingo",
+    url="https://github.com/irfanalidv/lingo-nlp-toolkit",
     project_urls={
-        "Homepage": "https://github.com/irfanalidv/Lingo",
+        "Homepage": "https://github.com/irfanalidv/lingo-nlp-toolkit",
         "Documentation": "https://lingo.readthedocs.io",
-        "Repository": "https://github.com/irfanalidv/Lingo.git",
-        "Bug Tracker": "https://github.com/irfanalidv/Lingo/issues",
-        "Source Code": "https://github.com/irfanalidv/Lingo",
-        "Changelog": "https://github.com/irfanalidv/Lingo/blob/main/CHANGELOG.md",
+        "Repository": "https://github.com/irfanalidv/lingo-nlp-toolkit.git",
+        "Bug Tracker": "https://github.com/irfanalidv/lingo-nlp-toolkit/issues",
+        "Source Code": "https://github.com/irfanalidv/lingo-nlp-toolkit",
+        "Changelog": "https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CHANGELOG.md",
     },
     packages=find_packages(include=["lingo", "lingo.*"]),
     package_data={

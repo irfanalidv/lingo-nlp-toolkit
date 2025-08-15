@@ -1,15 +1,23 @@
 Metadata-Version: 2.1
 Name: lingo-nlp-toolkit
-Version: 0.1.0
+Version: 0.2.1
 Summary: Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready
-Home-page: https://github.com/irfanalidv/Lingo
+Home-page: https://github.com/irfanalidv/lingo-nlp-toolkit
 Author: Md Irfan Ali
-Author-email: irfanali29@hotmail.com
-Keywords: nlp,natural language processing,transformers,bert,gpt,machine learning,ai
+Author-email: Md Irfan Ali <irfanali29@hotmail.com>
+Maintainer-email: Md Irfan Ali <irfanali29@hotmail.com>
+Project-URL: Homepage, https://github.com/irfanalidv/lingo-nlp-toolkit
+Project-URL: Documentation, https://lingo.readthedocs.io
+Project-URL: Repository, https://github.com/irfanalidv/lingo-nlp-toolkit.git
+Project-URL: Bug Tracker, https://github.com/irfanalidv/lingo-nlp-toolkit/issues
+Project-URL: Source Code, https://github.com/irfanalidv/lingo-nlp-toolkit
+Project-URL: Changelog, https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CHANGELOG.md
+Project-URL: Download, https://pypi.org/project/lingo/#files
+Keywords: nlp,natural-language-processing,transformers,bert,machine-learning,ai,text-processing,sentiment-analysis,named-entity-recognition,text-classification,embeddings
 Classifier: Development Status :: 4 - Beta
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Science/Research
-Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Education
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.9
@@ -17,21 +25,76 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
-Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Text Processing :: Linguistic
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Framework :: Jupyter
+Classifier: Typing :: Typed
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
-License-File: LICENSE.temp
-Requires-Dist: torch>=1.9.0
+License-File: LICENSE
+Requires-Dist: torch>=1.12.0
 Requires-Dist: transformers>=4.20.0
-Requires-Dist: spacy>=3.4.0
-Requires-Dist: nltk>=3.7
-Requires-Dist: scikit-learn>=1.0.0
+Requires-Dist: tokenizers>=0.13.0
+Requires-Dist: spacy>=3.5.0
+Requires-Dist: nltk>=3.8
+Requires-Dist: scikit-learn>=1.1.0
 Requires-Dist: numpy>=1.21.0
-Requires-Dist: pandas>=1.3.0
-Requires-Dist: tqdm>=4.62.0
+Requires-Dist: pandas>=1.5.0
+Requires-Dist: scipy>=1.9.0
+Requires-Dist: tqdm>=4.64.0
 Requires-Dist: pyyaml>=6.0
+Requires-Dist: requests>=2.28.0
+Requires-Dist: beautifulsoup4>=4.11.0
+Requires-Dist: lxml>=4.9.0
+Requires-Dist: fastapi>=0.95.0
+Requires-Dist: uvicorn>=0.20.0
+Requires-Dist: pydantic>=1.10.0
 Requires-Dist: sentence-transformers>=2.2.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: pytest-mock>=3.10.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Requires-Dist: isort>=5.10.0; extra == "dev"
+Requires-Dist: flake8>=5.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: pre-commit>=2.20.0; extra == "dev"
+Requires-Dist: tox>=4.0.0; extra == "dev"
+Requires-Dist: sphinx>=5.0.0; extra == "dev"
+Requires-Dist: sphinx-rtd-theme>=1.0.0; extra == "dev"
+Requires-Dist: myst-parser>=0.18.0; extra == "dev"
+Provides-Extra: full
+Requires-Dist: sentence-transformers>=2.2.0; extra == "full"
+Requires-Dist: pdfplumber>=0.7.0; extra == "full"
+Requires-Dist: python-docx>=0.8.11; extra == "full"
+Requires-Dist: openpyxl>=3.0.10; extra == "full"
+Requires-Dist: matplotlib>=3.5.0; extra == "full"
+Requires-Dist: seaborn>=0.11.0; extra == "full"
+Requires-Dist: plotly>=5.10.0; extra == "full"
+Requires-Dist: umap-learn>=0.5.3; extra == "full"
+Requires-Dist: hdbscan>=0.8.29; extra == "full"
+Requires-Dist: gensim>=4.3.0; extra == "full"
+Requires-Dist: wordcloud>=1.9.0; extra == "full"
+Requires-Dist: textstat>=0.7.3; extra == "full"
+Requires-Dist: language-tool-python>=2.7.1; extra == "full"
+Requires-Dist: spacy[transformers]>=3.5.0; extra == "full"
+Provides-Extra: gpu
+Requires-Dist: torch>=1.12.0; extra == "gpu"
+Requires-Dist: torchvision>=0.13.0; extra == "gpu"
+Requires-Dist: torchaudio>=0.12.0; extra == "gpu"
+Provides-Extra: docs
+Requires-Dist: sphinx>=5.0.0; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=1.0.0; extra == "docs"
+Requires-Dist: myst-parser>=0.18.0; extra == "docs"
+Requires-Dist: sphinx-autodoc-typehints>=1.19.0; extra == "docs"
+Provides-Extra: test
+Requires-Dist: pytest>=7.0.0; extra == "test"
+Requires-Dist: pytest-cov>=4.0.0; extra == "test"
+Requires-Dist: pytest-mock>=3.10.0; extra == "test"
+Requires-Dist: pytest-xdist>=3.0.0; extra == "test"
+Requires-Dist: coverage>=6.0.0; extra == "test"
 
 # **Lingo: Advanced NLP Toolkit**
 
@@ -55,16 +118,16 @@ Lingo bridges the gap between traditional NLP techniques and next-generation tra
 
 ```bash
 # One-command installation (recommended)
-pip install lingo
+pip install lingo-nlp-toolkit
 
 # Full installation with all dependencies
-pip install lingo[full]
+pip install lingo-nlp-toolkit[full]
 
 # Development installation
-pip install lingo[dev]
+pip install lingo-nlp-toolkit[dev]
 
 # GPU support
-pip install lingo[gpu]
+pip install lingo-nlp-toolkit[gpu]
 ```
 
 **✨ Auto-Setup**: Lingo automatically downloads all required NLP data and models on first use!
@@ -559,8 +622,8 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ```bash
 # Clone repository
-git clone https://github.com/irfanalidv/Lingo.git
-cd Lingo
+git clone https://github.com/irfanalidv/lingo-nlp-toolkit.git
+cd lingo-nlp-toolkit
 
 # Install in development mode
 pip install -e .[dev]
@@ -594,15 +657,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## **📞 Support & Community**
 
 - **Documentation**: [https://lingo.readthedocs.io](https://lingo.readthedocs.io)
-- **Issues**: [GitHub Issues](https://github.com/irfanalidv/Lingo/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/irfanalidv/Lingo/discussions)
+- **Issues**: [GitHub Issues](https://github.com/irfanalidv/lingo-nlp-toolkit/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/irfanalidv/lingo-nlp-toolkit/discussions)
 - **Email**: irfanali29@hotmail.com
 
 ---
 
 ## **⭐ Star History**
 
-[![Star History Chart](https://api.star-history.com/svg?repos=irfanalidv/Lingo&type=Date)](https://star-history.com/#irfanalidv/Lingo&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=irfanalidv/lingo-nlp-toolkit&type=Date)](https://star-history.com/#irfanalidv/lingo-nlp-toolkit&Date)
 
 ---
 

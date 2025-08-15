@@ -5,6 +5,7 @@ Clean setup script for Lingo NLP Toolkit.
 
 from setuptools import setup, find_packages
 
+
 # Read the README file
 def read_readme():
     """Read README.md file."""
@@ -14,15 +15,16 @@ def read_readme():
     except FileNotFoundError:
         return "Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready"
 
+
 setup(
-    name="lingo",
-    version="0.1.0",
+    name="lingo-nlp-toolkit",
+    version="0.2.0",
     author="Md Irfan Ali",
     author_email="irfanali29@hotmail.com",
     description="Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/irfanalidv/Lingo",
+    url="https://github.com/irfanalidv/lingo-nlp-toolkit",
     packages=find_packages(),
     python_requires=">=3.9",
     install_requires=[
@@ -75,9 +77,9 @@ setup(
     ],
     keywords="nlp, natural language processing, transformers, bert, gpt, machine learning, ai",
     project_urls={
-        "Bug Reports": "https://github.com/irfanalidv/Lingo/issues",
-        "Source": "https://github.com/irfanalidv/Lingo",
-        "Documentation": "https://github.com/irfanalidv/Lingo#readme",
+        "Bug Reports": "https://github.com/irfanalidv/lingo-nlp-toolkit/issues",
+        "Source": "https://github.com/irfanalidv/lingo-nlp-toolkit",
+        "Documentation": "https://github.com/irfanalidv/lingo-nlp-toolkit#readme",
     },
     include_package_data=True,
     zip_safe=False,

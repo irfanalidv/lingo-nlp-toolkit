@@ -5,6 +5,34 @@ All notable changes to the Lingo NLP Toolkit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2025-01-15
+
+### Fixed
+- **Documentation Updates**: Fixed all remaining old package name references (`lingo` → `lingo-nlp-toolkit`)
+- **Installation Instructions**: Updated all pip install commands throughout documentation
+- **Repository References**: Ensured all GitHub URLs point to the new repository
+- **Setup Files**: Updated all setup files to use correct package name and version
+- **Requirements**: Updated requirements.txt with correct package references
+
+## [0.2.0] - 2025-01-15
+
+### Added
+
+- **Repository Migration**: Moved to new GitHub repository at [https://github.com/irfanalidv/lingo-nlp-toolkit](https://github.com/irfanalidv/lingo-nlp-toolkit)
+- **Updated Documentation**: All documentation now references the new repository URL
+- **PyPI Package**: Successfully published as `lingo-nlp-toolkit` on PyPI
+
+### Changed
+
+- **Package Name**: Changed from `lingo` to `lingo-nlp-toolkit` to avoid PyPI conflicts
+- **Installation Command**: Users now install with `pip install lingo-nlp-toolkit`
+- **Repository URLs**: All GitHub links updated to new repository
+
+### Fixed
+
+- **Metadata Issues**: Resolved PyPI metadata conflicts
+- **Documentation Consistency**: All files now have consistent repository references
+
 ## [Unreleased]
 
 ### Added
@@ -74,6 +102,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **0.2.1**: Documentation fixes and package name consistency updates
+- **0.2.0**: Repository migration and PyPI package updates
 - **0.1.0**: Initial release with core NLP capabilities
 - **Unreleased**: Advanced enterprise features and optimizations
 

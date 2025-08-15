@@ -182,7 +182,7 @@ negative_count = sum(1 for r in results if r['label'] == 'NEGATIVE')
 ## **🔧 Technical Capabilities**
 
 ### **1. Auto-Setup & Installation**
-- **One-command Installation**: `pip install lingo`
+- **One-command Installation**: `pip install lingo-nlp-toolkit`
 - **Automatic Data Download**: NLTK, spaCy, transformer models
 - **Environment Setup**: Automatic configuration and validation
 - **Dependency Management**: Smart dependency resolution
@@ -263,13 +263,13 @@ lingo download-model --model bert-base-uncased
 ### **1. Installation**
 ```bash
 # Basic installation
-pip install lingo
+pip install lingo-nlp-toolkit
 
 # Full installation with all dependencies
-pip install lingo[full]
+pip install lingo-nlp-toolkit[full]
 
 # GPU support
-pip install lingo[gpu]
+pip install lingo-nlp-toolkit[gpu]
 ```
 
 ### **2. First Use**

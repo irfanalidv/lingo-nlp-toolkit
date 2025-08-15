@@ -8,13 +8,13 @@ Lingo is designed to be **install-and-use** - no manual setup required! When you
 
 ### **Option 1: Install from PyPI (Recommended)**
 ```bash
-pip install lingo
+pip install lingo-nlp-toolkit
 ```
 
 ### **Option 2: Install from Source**
 ```bash
-git clone https://github.com/irfanalidv/Lingo.git
-cd Lingo
+git clone https://github.com/irfanalidv/lingo-nlp-toolkit.git
+cd lingo-nlp-toolkit
 pip install -e .
 ```
 
@@ -106,7 +106,7 @@ pip install --user lingo
 If you get import errors:
 ```bash
 pip install --upgrade pip
-pip install lingo[full]
+pip install lingo-nlp-toolkit[full]
 ```
 
 ### **Manual Data Downloads**
@@ -128,11 +128,11 @@ You can customize the installation:
 ```bash
 # Custom cache directory
 export LINGO_CACHE_DIR="/path/to/custom/cache"
-pip install lingo
+pip install lingo-nlp-toolkit
 
 # Skip auto-setup (not recommended)
 export LINGO_SKIP_SETUP=1
-pip install lingo
+pip install lingo-nlp-toolkit
 ```
 
 ## **Development Installation**
@@ -140,8 +140,8 @@ pip install lingo
 For development work:
 
 ```bash
-git clone https://github.com/irfanalidv/Lingo.git
-cd Lingo
+git clone https://github.com/irfanalidv/lingo-nlp-toolkit.git
+cd lingo-nlp-toolkit
 
 # Install with development dependencies
 pip install -e .[dev]
@@ -172,7 +172,7 @@ make test
 ### **GPU Support**
 ```bash
 # Install with GPU support
-pip install lingo[gpu]
+pip install lingo-nlp-toolkit[gpu]
 
 # Or install PyTorch with CUDA manually
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
@@ -190,7 +190,7 @@ To completely remove Lingo:
 
 ```bash
 # Remove the package
-pip uninstall lingo
+pip uninstall lingo-nlp-toolkit
 
 # Remove cached data (optional)
 rm -rf ~/.lingo_cache
@@ -205,7 +205,7 @@ If you encounter issues:
 2. **Run setup manually**: `lingo setup --force`
 3. **Check disk space**: Ensure you have enough free space
 4. **Check network**: Ensure you can access the internet
-5. **Open an issue**: [GitHub Issues](https://github.com/irfanalidv/Lingo/issues)
+5. **Open an issue**: [GitHub Issues](https://github.com/irfanalidv/lingo-nlp-toolkit/issues)
 
 ## **Next Steps**
 

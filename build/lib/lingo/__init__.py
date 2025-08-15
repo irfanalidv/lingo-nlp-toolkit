@@ -3,7 +3,7 @@ Lingo: Advanced NLP Toolkit
 Lightweight, Fast, and Transformer-Ready
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.1"
 __author__ = "Md Irfan Ali"
 __email__ = "irfanali29@hotmail.com"
 

@@ -20,16 +20,16 @@ Lingo bridges the gap between traditional NLP techniques and next-generation tra
 
 ```bash
 # One-command installation (recommended)
-pip install lingo
+pip install lingo-nlp-toolkit
 
 # Full installation with all dependencies
-pip install lingo[full]
+pip install lingo-nlp-toolkit[full]
 
 # Development installation
-pip install lingo[dev]
+pip install lingo-nlp-toolkit[dev]
 
 # GPU support
-pip install lingo[gpu]
+pip install lingo-nlp-toolkit[gpu]
 ```
 
 **✨ Auto-Setup**: Lingo automatically downloads all required NLP data and models on first use!
@@ -524,8 +524,8 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ```bash
 # Clone repository
-git clone https://github.com/irfanalidv/Lingo.git
-cd Lingo
+git clone https://github.com/irfanalidv/lingo-nlp-toolkit.git
+cd lingo-nlp-toolkit
 
 # Install in development mode
 pip install -e .[dev]
@@ -559,15 +559,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## **📞 Support & Community**
 
 - **Documentation**: [https://lingo.readthedocs.io](https://lingo.readthedocs.io)
-- **Issues**: [GitHub Issues](https://github.com/irfanalidv/Lingo/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/irfanalidv/Lingo/discussions)
+- **Issues**: [GitHub Issues](https://github.com/irfanalidv/lingo-nlp-toolkit/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/irfanalidv/lingo-nlp-toolkit/discussions)
 - **Email**: irfanali29@hotmail.com
 
 ---
 
 ## **⭐ Star History**
 
-[![Star History Chart](https://api.star-history.com/svg?repos=irfanalidv/Lingo&type=Date)](https://star-history.com/#irfanalidv/Lingo&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=irfanalidv/lingo-nlp-toolkit&type=Date)](https://star-history.com/#irfanalidv/lingo-nlp-toolkit&Date)
 
 ---
 

@@ -14,7 +14,7 @@ Get up and running with Lingo NLP toolkit in minutes!
 
 ```bash
 # One-command installation
-pip install lingo
+pip install lingo-nlp-toolkit
 ```
 
 **✨ Auto-Setup**: Lingo automatically downloads all required NLP data and models on first use!
@@ -23,8 +23,8 @@ pip install lingo
 
 ```bash
 # Clone the repository
-git clone https://github.com/irfanalidv/Lingo.git
-cd Lingo
+git clone https://github.com/irfanalidv/lingo-nlp-toolkit.git
+cd lingo-nlp-toolkit
 
 # Install in development mode
 pip install -e .
@@ -36,7 +36,7 @@ lingo setup
 ### **Option 2: Install from PyPI (when available)**
 
 ```bash
-pip install lingo
+pip install lingo-nlp-toolkit
 ```
 
 ## **Quick Test**

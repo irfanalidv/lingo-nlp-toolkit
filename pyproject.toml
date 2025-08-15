@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lingo"
+name = "lingo-nlp-toolkit"
 dynamic = ["version"]
 description = "Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready"
 readme = "README.md"
@@ -112,12 +112,12 @@ test = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/irfanalidv/Lingo"
+Homepage = "https://github.com/irfanalidv/lingo-nlp-toolkit"
 Documentation = "https://lingo.readthedocs.io"
-Repository = "https://github.com/irfanalidv/Lingo.git"
-"Bug Tracker" = "https://github.com/irfanalidv/Lingo/issues"
-"Source Code" = "https://github.com/irfanalidv/Lingo"
-Changelog = "https://github.com/irfanalidv/Lingo/blob/main/CHANGELOG.md"
+Repository = "https://github.com/irfanalidv/lingo-nlp-toolkit.git"
+"Bug Tracker" = "https://github.com/irfanalidv/lingo-nlp-toolkit/issues"
+"Source Code" = "https://github.com/irfanalidv/lingo-nlp-toolkit"
+Changelog = "https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CHANGELOG.md"
 "Download" = "https://pypi.org/project/lingo/#files"
 
 [project.scripts]

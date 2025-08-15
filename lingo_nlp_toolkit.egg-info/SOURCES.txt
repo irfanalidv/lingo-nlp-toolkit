@@ -1,11 +1,12 @@
 CAPABILITIES.md
 CHANGELOG.md
 INSTALLATION.md
-LICENSE.temp
+LICENSE
 MANIFEST.in
 Makefile
 QUICKSTART.md
 README.md
+pyproject.toml
 requirements.txt
 setup.py
 setup_minimal_final.py
