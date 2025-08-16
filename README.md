@@ -5,7 +5,8 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI version](https://badge.fury.io/py/lingo-nlp-toolkit.svg)](https://badge.fury.io/py/lingo-nlp-toolkit)
-[![PyPI Downloads](https://static.pepy.tech/badge/lingo-nlp-toolkit)](https://pepy.tech/projects/lingo-nlp-toolkit)
+[![Downloads](https://static.pepy.tech/badge/lingo-nlp-toolkit)](https://pepy.tech/project/lingo-nlp-toolkit)
+
 
 ## **Overview**
 
