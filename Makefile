@@ -1,4 +1,4 @@
-.PHONY: help install install-dev install-full install-gpu test test-cov lint format clean demo examples build build-check publish-test publish install-deps check ci
+.PHONY: help install install-dev install-full install-gpu test test-cov lint format clean examples build build-check publish-test publish install-deps check ci
 
 help:  ## Show this help message
 	@echo "Lingo NLP Toolkit - Development Commands"
@@ -36,9 +36,6 @@ clean:  ## Clean build artifacts
 	rm -rf build/ dist/ *.egg-info/ .pytest_cache/ htmlcov/
 	find . -type f -name "*.pyc" -delete
 	find . -type d -name "__pycache__" -delete
-
-demo:  ## Run the demo script
-	python demo.py
 
 examples:  ## Run the basic usage examples
 	python examples/basic_usage.py
