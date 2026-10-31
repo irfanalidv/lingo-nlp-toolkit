@@ -113,7 +113,7 @@ class TextPreprocessor:
         """Load stopwords for the specified language."""
         try:
             self.stopwords = set(stopwords.words(self.language))
-        except LookupError:
+        except (LookupError, OSError):  # OSError: corpus present but language file missing
             logger.warning("Stopwords for language '%s' not found", self.language)
             self.stopwords = set()
 
