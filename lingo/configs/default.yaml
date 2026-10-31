@@ -32,32 +32,32 @@ models:
     max_length: 512
     truncation: true
     padding: true
-    
+
   ner:
     default_model: "dslim/bert-base-NER"
     max_length: 512
     truncation: true
     padding: true
-    
+
   sentiment_analysis:
     default_model: "cardiffnlp/twitter-roberta-base-sentiment-latest"
     max_length: 512
     truncation: true
     padding: true
-    
+
   embedding:
     default_model: "sentence-transformers/all-MiniLM-L6-v2"
     max_length: 512
     truncation: true
     padding: true
     normalize: true
-    
+
   question_answering:
     default_model: "deepset/roberta-base-squad2"
     max_length: 384
     truncation: true
     padding: true
-    
+
   summarization:
     default_model: "facebook/bart-large-cnn"
     max_length: 1024
@@ -75,7 +75,7 @@ pipelines:
     model:
       max_length: 512
       return_all_scores: false
-      
+
   document_classification:
     preprocessing:
       lowercase: true
@@ -85,7 +85,7 @@ pipelines:
     model:
       max_length: 512
       return_all_scores: true
-      
+
   entity_extraction:
     preprocessing:
       lowercase: false

@@ -1,4 +1,4 @@
-.PHONY: help install install-dev install-full install-gpu test test-cov lint format clean examples build build-check publish-test publish install-deps check ci
+.PHONY: help install install-dev install-full install-gpu test test-cov lint format clean examples build build-check publish-test publish install-deps check ci type-check
 
 help:  ## Show this help message
 	@echo "Lingo NLP Toolkit - Development Commands"
@@ -22,7 +22,10 @@ test:  ## Run tests
 	python -m pytest tests/ -v
 
 test-cov:  ## Run tests with coverage
-	python -m pytest tests/ --cov=lingo --cov-report=html --cov-report=term
+	python -m pytest tests/ --cov=lingo --cov-report=html --cov-report=term --cov-fail-under=90
+
+type-check:  ## Run mypy
+	mypy lingo
 
 lint:  ## Run linting checks
 	ruff check .
@@ -37,8 +40,11 @@ clean:  ## Clean build artifacts
 	find . -type f -name "*.pyc" -delete
 	find . -type d -name "__pycache__" -delete
 
-examples:  ## Run the basic usage examples
-	python examples/basic_usage.py
+examples:  ## Run the example scripts (downloads models on first run)
+	python examples/text_toolkit_offline.py
+	python examples/support_ticket_triage.py
+	python examples/semantic_faq_search.py
+	python examples/document_qa_and_summary.py
 
 build: clean  ## Build sdist and wheel
 	python -m build
@@ -55,6 +61,6 @@ publish: build-check  ## Publish to PyPI
 install-deps:  ## Download spaCy/NLTK data and common models
 	lingo setup
 
-check: lint test  ## Run all checks (lint + test)
+check: lint type-check test  ## Run all checks (lint + types + tests)
 
 ci: check  ## Run CI checks (alias for check)
