@@ -6,9 +6,11 @@ Provides a unified interface for all NLP tasks.
 import json
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
+from .exceptions import InvalidInputError, UnsupportedTaskError
 from .models import (
+    BaseModel,
     EmbeddingModel,
     NERModel,
     QuestionAnsweringModel,
@@ -45,14 +47,14 @@ class Pipeline:
     # ``config["preprocessing"]``. Transformer tokenizers handle casing and
     # punctuation themselves, so by default we only normalize Unicode and
     # whitespace (lowercasing would hurt cased models such as most NER models).
-    DEFAULT_PREPROCESSING: dict[str, Any] = {
+    DEFAULT_PREPROCESSING: ClassVar[dict[str, Any]] = {
         "normalize_unicode": True,
         "lowercase": False,
         "remove_extra_whitespace": True,
         "use_spacy": False,
     }
 
-    SUPPORTED_TASKS = {
+    SUPPORTED_TASKS: ClassVar[dict[str, type[BaseModel]]] = {
         "text-classification": TextClassifier,
         "ner": NERModel,
         "sentiment-analysis": SentimentAnalyzer,
@@ -78,8 +80,8 @@ class Pipeline:
         self.kwargs = kwargs
 
         # Initialize components
-        self.preprocessor = None
-        self.model = None
+        self.preprocessor: TextPreprocessor
+        self.model: BaseModel
         self._initialize_pipeline()
 
     def _determine_device(self, device: str) -> str:
@@ -89,16 +91,15 @@ class Pipeline:
 
             if torch.cuda.is_available():
                 return "cuda"
-            elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
                 return "mps"
-            else:
-                return "cpu"
+            return "cpu"
         return device
 
-    def _initialize_pipeline(self):
+    def _initialize_pipeline(self) -> None:
         """Initialize the pipeline components."""
         if self.task not in self.SUPPORTED_TASKS:
-            raise ValueError(
+            raise UnsupportedTaskError(
                 f"Task '{self.task}' not supported. "
                 f"Supported tasks: {list(self.SUPPORTED_TASKS.keys())}"
             )
@@ -120,7 +121,7 @@ class Pipeline:
             **self.kwargs,
         )
 
-        logger.info(f"Initialized {self.task} pipeline with {self.model_name}")
+        logger.info("Initialized %s pipeline with %s", self.task, self.model_name)
 
     def __call__(self, inputs: str | list[str] | None = None, **kwargs: Any) -> Any:
         """
@@ -136,12 +137,14 @@ class Pipeline:
         # Handle special cases like question-answering
         if self.task == "question-answering":
             if "question" not in kwargs or "context" not in kwargs:
-                raise ValueError("Question-answering requires 'question' and 'context' arguments")
+                raise InvalidInputError(
+                    "Question-answering requires 'question' and 'context' arguments"
+                )
             return self.model(**kwargs)
 
         # Handle regular single-input tasks
         if inputs is None:
-            raise ValueError("Inputs are required for this task")
+            raise InvalidInputError("Inputs are required for this task")
 
         single = isinstance(inputs, str)
         results = self._run(inputs, **kwargs)
@@ -176,7 +179,7 @@ class Pipeline:
         if batch_size < 1:
             raise ValueError("batch_size must be >= 1")
         if self.task == "question-answering":
-            raise ValueError("batch_predict is not supported for question-answering")
+            raise InvalidInputError("batch_predict is not supported for question-answering")
 
         results: list[Any] = []
 
@@ -201,7 +204,7 @@ class Pipeline:
             "kwargs": self.kwargs,
         }
 
-        with open(path / "pipeline_config.json", "w") as f:
+        with (path / "pipeline_config.json").open("w", encoding="utf-8") as f:
             json.dump(config, f, indent=2)
 
         # Save model
@@ -212,15 +215,22 @@ class Pipeline:
         if self.preprocessor:
             self.preprocessor.save(path / "preprocessor")
 
-        logger.info(f"Pipeline saved to {path}")
+        logger.info("Pipeline saved to %s", path)
 
     @classmethod
-    def load(cls, path: str | Path) -> "Pipeline":
-        """Load a pipeline from disk."""
+    def load(cls, path: str | Path, device: str | None = None) -> "Pipeline":
+        """Load a pipeline saved with :meth:`save`.
+
+        Args:
+            path: Directory written by :meth:`save`.
+            device: Override the saved device (for example ``"cpu"`` or ``"auto"`` when a
+                pipeline saved on a GPU machine is loaded on a CPU-only one). Defaults to
+                the saved device.
+        """
         path = Path(path)
 
         # Load configuration
-        with open(path / "pipeline_config.json") as f:
+        with (path / "pipeline_config.json").open(encoding="utf-8") as f:
             config = json.load(f)
 
         # Prefer the locally saved model weights over re-downloading from the Hub
@@ -230,7 +240,7 @@ class Pipeline:
         preprocessor_dir = path / "preprocessor"
         pipeline_config = dict(config.get("config") or {})
         if (preprocessor_dir / "preprocessor_config.json").exists():
-            with open(preprocessor_dir / "preprocessor_config.json") as f:
+            with (preprocessor_dir / "preprocessor_config.json").open(encoding="utf-8") as f:
                 saved = json.load(f)
             pipeline_config["preprocessing"] = saved.get("config", {})
 
@@ -238,7 +248,7 @@ class Pipeline:
             task=config["task"],
             model=model_source,
             config=pipeline_config,
-            device=config.get("device", "auto"),
+            device=device or config.get("device", "auto"),
             cache_dir=config.get("cache_dir"),
             **config.get("kwargs", {}),
         )
@@ -246,7 +256,7 @@ class Pipeline:
         pipeline.model_name = config["model_name"]
         pipeline.config = config.get("config") or {}
 
-        logger.info(f"Pipeline loaded from {path}")
+        logger.info("Pipeline loaded from %s", path)
         return pipeline
 
     def get_info(self) -> dict[str, Any]:

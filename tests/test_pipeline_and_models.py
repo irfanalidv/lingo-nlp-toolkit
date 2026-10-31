@@ -277,7 +277,7 @@ def test_summarization_uses_prefix_and_generation_defaults(
     class FakeSeq2Seq:
         device = "cpu"
 
-        class config:  # noqa: N801
+        class config:
             task_specific_params = {"summarization": {"prefix": "summarize: ", "num_beams": 4}}
 
         def generate(self, **kw: Any) -> Any:

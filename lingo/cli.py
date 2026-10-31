@@ -29,9 +29,9 @@ def list_models() -> None:
     print("Available models for different NLP tasks:\n")
 
     for task, model_list in models.items():
-        print(f"📋 {task.upper()}:")
+        print(f"{task.upper()}:")
         for model in model_list:
-            print(f"   • {model}")
+            print(f"  - {model}")
         print()
 
 
@@ -57,7 +57,7 @@ def run_pipeline(args: argparse.Namespace) -> int:
 
         # Process input
         if args.input_file:
-            with open(args.input_file, encoding="utf-8") as f:
+            with Path(args.input_file).open(encoding="utf-8") as f:
                 text = f.read().strip()
         elif args.text:
             text = args.text
@@ -66,14 +66,15 @@ def run_pipeline(args: argparse.Namespace) -> int:
             text = sys.stdin.read().strip()
 
         if not text:
-            print("Error: No input text provided")
+            print("Error: No input text provided", file=sys.stderr)
             return 1
 
         # Run inference
         if args.task == "question-answering":
             if not args.question:
                 print(
-                    "Error: question-answering requires --question (the input text is the context)"
+                    "Error: question-answering requires --question (the input text is the context)",
+                    file=sys.stderr,
                 )
                 return 1
             result = pipeline(question=args.question, context=text)
@@ -82,7 +83,7 @@ def run_pipeline(args: argparse.Namespace) -> int:
 
         # Output results
         if args.output_file:
-            with open(args.output_file, "w", encoding="utf-8") as f:
+            with Path(args.output_file).open("w", encoding="utf-8") as f:
                 json.dump(result, f, indent=2, default=_json_default)
             print(f"Results saved to {args.output_file}")
         else:
@@ -91,8 +92,8 @@ def run_pipeline(args: argparse.Namespace) -> int:
         return 0
 
     except Exception as e:
-        print(f"Error: {e}")
-        if args.verbose:
+        print(f"Error: {e}", file=sys.stderr)
+        if getattr(args, "verbose", False):
             import traceback
 
             traceback.print_exc()
@@ -116,14 +117,13 @@ def setup_cmd(args: argparse.Namespace) -> int:
         success = setup_lingo_environment()
 
         if success:
-            print("✅ Lingo environment setup completed successfully!")
+            print("Lingo environment setup completed successfully.")
             return 0
-        else:
-            print("⚠️  Setup completed with some warnings. Check the output above.")
-            return 1
+        print("Setup completed with warnings. Check the log output above.", file=sys.stderr)
+        return 1
 
     except Exception as e:
-        print(f"❌ Error during setup: {e}")
+        print(f"Error during setup: {e}", file=sys.stderr)
         return 1
 
 
@@ -135,7 +135,7 @@ def download_model_cmd(args: argparse.Namespace) -> int:
         print(f"Model downloaded successfully to: {cache_path}")
         return 0
     except Exception as e:
-        print(f"Error downloading model: {e}")
+        print(f"Error downloading model: {e}", file=sys.stderr)
         return 1
 
 
@@ -231,15 +231,14 @@ Examples:
     if args.command == "list-models":
         list_models()
         return 0
-    elif args.command == "setup":
+    if args.command == "setup":
         return setup_cmd(args)
-    elif args.command == "download-model":
+    if args.command == "download-model":
         return download_model_cmd(args)
-    elif args.command == "run":
+    if args.command == "run":
         return run_pipeline(args)
-    else:
-        parser.print_help()
-        return 1
+    parser.print_help()
+    return 1
 
 
 if __name__ == "__main__":

@@ -131,12 +131,17 @@ line-length = 100
 extend-exclude = ["build", "dist", "*.md"]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "B", "UP"]
-ignore = ["E501", "B008"]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "RUF", "PTH", "RET", "PIE"]
+ignore = [
+    "E501",  # long lines are handled by the formatter
+    "B008",  # function calls in argument defaults (argparse/typer style)
+]
 
 [tool.ruff.lint.per-file-ignores]
-"examples/*" = ["B", "UP", "E722", "F841"]
-"demo.py" = ["B", "UP", "E722", "F841"]
+# Example scripts print to stdout and favour readability
+"examples/*" = ["E402"]
+# Test fakes mimic HF objects with class-level dicts; unicode quotes are test data
+"tests/*" = ["RUF012", "RUF001"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["lingo"]
@@ -152,3 +157,7 @@ source = ["lingo"]
 [tool.mypy]
 python_version = "3.10"
 ignore_missing_imports = true
+warn_unused_ignores = true
+check_untyped_defs = true
+warn_redundant_casts = true
+no_implicit_optional = true

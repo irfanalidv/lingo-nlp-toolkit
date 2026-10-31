@@ -28,13 +28,13 @@ def download_spacy_model(model_name: str = "en_core_web_sm") -> bool:
         # Check if model is already installed
         try:
             spacy.load(model_name)
-            logger.info(f"spaCy model '{model_name}' is already available")
+            logger.info("spaCy model '%s' is already available", model_name)
             return True
         except OSError:
             pass
 
         # Download the model
-        logger.info(f"Downloading spaCy model: {model_name}")
+        logger.info("Downloading spaCy model: %s", model_name)
         subprocess.run(
             [sys.executable, "-m", "spacy", "download", model_name],
             check=False,
@@ -43,10 +43,10 @@ def download_spacy_model(model_name: str = "en_core_web_sm") -> bool:
         # Verify download
         try:
             spacy.load(model_name)
-            logger.info(f"Successfully downloaded spaCy model: {model_name}")
+            logger.info("Successfully downloaded spaCy model: %s", model_name)
             return True
         except OSError as e:
-            logger.error(f"Failed to download spaCy model: {e}")
+            logger.error("Failed to download spaCy model: %s", e)
             return False
 
     except ImportError:
@@ -62,11 +62,11 @@ def download_nltk_data() -> bool:
         for package, resource_path in NLTK_RESOURCES.items():
             try:
                 nltk.data.find(resource_path)
-                logger.info(f"NLTK package '{package}' is already available")
+                logger.info("NLTK package '%s' is already available", package)
             except LookupError:
-                logger.info(f"Downloading NLTK package: {package}")
+                logger.info("Downloading NLTK package: %s", package)
                 nltk.download(package, quiet=True)
-                logger.info(f"Successfully downloaded NLTK package: {package}")
+                logger.info("Successfully downloaded NLTK package: %s", package)
 
         return True
 
@@ -92,12 +92,12 @@ def download_transformers_data() -> bool:
 
         for model_name in essential_models:
             try:
-                logger.info(f"Downloading model: {model_name}")
+                logger.info("Downloading model: %s", model_name)
                 AutoTokenizer.from_pretrained(model_name)
                 AutoModel.from_pretrained(model_name)
-                logger.info(f"Successfully downloaded: {model_name}")
+                logger.info("Successfully downloaded: %s", model_name)
             except Exception as e:
-                logger.warning(f"Failed to download {model_name}: {e}")
+                logger.warning("Failed to download %s: %s", model_name, e)
 
         return True
 
@@ -125,11 +125,11 @@ def setup_lingo_environment() -> bool:
 
     # Create a completion marker
     completion_file = cache_dir / "setup_complete.txt"
-    with open(completion_file, "w", encoding="utf-8") as f:
-        f.write("Lingo setup completed successfully!\n")
-        f.write(f"spaCy: {'✓' if spacy_success else '✗'}\n")
-        f.write(f"NLTK: {'✓' if nltk_success else '✗'}\n")
-        f.write(f"Transformers: {'✓' if transformers_success else '✗'}\n")
+    with completion_file.open("w", encoding="utf-8") as f:
+        f.write("Lingo setup finished.\n")
+        f.write(f"spaCy: {'ok' if spacy_success else 'failed'}\n")
+        f.write(f"NLTK: {'ok' if nltk_success else 'failed'}\n")
+        f.write(f"Transformers: {'ok' if transformers_success else 'failed'}\n")
 
     logger.info("Lingo environment setup completed!")
     return spacy_success and nltk_success and transformers_success

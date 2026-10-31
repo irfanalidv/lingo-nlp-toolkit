@@ -8,7 +8,7 @@ import logging
 import re
 import unicodedata
 from pathlib import Path
-from typing import Any
+from typing import Any, overload
 
 import nltk
 import spacy
@@ -38,7 +38,7 @@ class TextPreprocessor:
         config: dict[str, Any] | None = None,
         device: str = "cpu",
         language: str = "english",
-    ):
+    ) -> None:
         self.config = config or {}
         self.device = device
         self.language = language
@@ -47,7 +47,7 @@ class TextPreprocessor:
         self._init_nltk()
 
         # Initialize spaCy for advanced NLP
-        self.spacy_model = None
+        self.spacy_model: Any = None
         if self.config.get("use_spacy", True):
             self._init_spacy()
 
@@ -55,7 +55,7 @@ class TextPreprocessor:
         self._init_tokenizers()
 
         # Load stopwords
-        self.stopwords = set()
+        self.stopwords: set[str] = set()
         if self.config.get("remove_stopwords", False):
             self._load_stopwords()
 
@@ -67,7 +67,7 @@ class TextPreprocessor:
         if self.config.get("stem", False):
             self.stemmer = PorterStemmer()
 
-    def _init_nltk(self):
+    def _init_nltk(self) -> None:
         """Initialize NLTK components and download required data."""
         try:
             # Try to find required NLTK data
@@ -77,26 +77,26 @@ class TextPreprocessor:
                 try:
                     nltk.data.find(resource_path)
                 except LookupError:
-                    logger.info(f"Downloading NLTK package: {package}")
+                    logger.info("Downloading NLTK package: %s", package)
                     nltk.download(package, quiet=True)
 
         except Exception as e:
-            logger.warning(f"Failed to initialize NLTK: {e}")
+            logger.warning("Failed to initialize NLTK: %s", e)
             logger.warning("Some NLTK features may not work. Run 'lingo setup' to fix this.")
 
-    def _init_spacy(self):
+    def _init_spacy(self) -> None:
         """Initialize spaCy model."""
         model_name = self.config.get("spacy_model", "en_core_web_sm")
         try:
             self.spacy_model = spacy.load(model_name)
-            logger.info(f"Loaded spaCy model: {model_name}")
+            logger.info("Loaded spaCy model: %s", model_name)
         except OSError:
             logger.warning(
                 f"spaCy model {model_name} not found. Install with: python -m spacy download {model_name}"
             )
             self.spacy_model = None
 
-    def _init_tokenizers(self):
+    def _init_tokenizers(self) -> None:
         """Initialize tokenizers."""
         self.word_tokenizer = word_tokenize
         self.sent_tokenizer = sent_tokenize
@@ -109,13 +109,19 @@ class TextPreprocessor:
                 "use a model tokenizer from transformers instead"
             )
 
-    def _load_stopwords(self):
+    def _load_stopwords(self) -> None:
         """Load stopwords for the specified language."""
         try:
             self.stopwords = set(stopwords.words(self.language))
         except LookupError:
-            logger.warning(f"Stopwords for language '{self.language}' not found")
+            logger.warning("Stopwords for language '%s' not found", self.language)
             self.stopwords = set()
+
+    @overload
+    def __call__(self, texts: str) -> str: ...
+
+    @overload
+    def __call__(self, texts: list[str]) -> list[str]: ...
 
     def __call__(self, texts: str | list[str]) -> str | list[str]:
         """
@@ -129,8 +135,7 @@ class TextPreprocessor:
         """
         if isinstance(texts, str):
             return self.preprocess_text(texts)
-        else:
-            return [self.preprocess_text(text) for text in texts]
+        return [self.preprocess_text(text) for text in texts]
 
     def preprocess_text(self, text: str) -> str:
         """
@@ -193,6 +198,11 @@ class TextPreprocessor:
 
     def expand_contractions(self, text: str) -> str:
         """Expand common contractions."""
+        # Irregular forms first, otherwise "won't" would become "wo not"
+        irregular = {"won't": "will not", "can't": "cannot", "shan't": "shall not"}
+        for contraction, expansion in irregular.items():
+            text = re.sub(re.escape(contraction), expansion, text, flags=re.IGNORECASE)
+
         contractions = {
             "n't": " not",
             "'ll": " will",
@@ -237,8 +247,7 @@ class TextPreprocessor:
         if self.spacy_model:
             doc = self.spacy_model(text)
             return [token.text for token in doc if not token.is_space]
-        else:
-            return self.word_tokenizer(text)
+        return self.word_tokenizer(text)
 
     def tokenize_sentences(self, text: str) -> list[str]:
         """Tokenize text into sentences."""
@@ -299,7 +308,7 @@ class TextPreprocessor:
 
         return result
 
-    def save(self, path: str | Path):
+    def save(self, path: str | Path) -> None:
         """Save preprocessor configuration."""
         path = Path(path)
         path.mkdir(parents=True, exist_ok=True)
@@ -310,17 +319,17 @@ class TextPreprocessor:
             "device": self.device,
         }
 
-        with open(path / "preprocessor_config.json", "w") as f:
+        with (path / "preprocessor_config.json").open("w", encoding="utf-8") as f:
             json.dump(config, f, indent=2)
 
-        logger.info(f"Preprocessor saved to {path}")
+        logger.info("Preprocessor saved to %s", path)
 
     @classmethod
     def load(cls, path: str | Path) -> "TextPreprocessor":
         """Load preprocessor from disk."""
         path = Path(path)
 
-        with open(path / "preprocessor_config.json") as f:
+        with (path / "preprocessor_config.json").open(encoding="utf-8") as f:
             config = json.load(f)
 
         preprocessor = cls(
@@ -329,5 +338,5 @@ class TextPreprocessor:
             language=config["language"],
         )
 
-        logger.info(f"Preprocessor loaded from {path}")
+        logger.info("Preprocessor loaded from %s", path)
         return preprocessor

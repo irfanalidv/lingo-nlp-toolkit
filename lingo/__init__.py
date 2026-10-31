@@ -1,7 +1,4 @@
-"""
-Lingo: Advanced NLP Toolkit
-Lightweight, Fast, and Transformer-Ready
-"""
+"""Lingo: one Pipeline API for common NLP tasks on Hugging Face models, plus preprocessing."""
 
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _pkg_version
@@ -15,6 +12,7 @@ __email__ = "irfanali29@hotmail.com"
 
 # Core imports
 from .core import Pipeline
+from .exceptions import InvalidInputError, LingoError, UnsupportedTaskError
 from .models import (
     EmbeddingModel,
     NERModel,
@@ -33,19 +31,22 @@ from .utils import (
 
 # Version info
 __all__ = [
-    "__version__",
+    "EmbeddingModel",
+    "InvalidInputError",
+    "LingoError",
+    "NERModel",
+    "Pipeline",
+    "QuestionAnsweringModel",
+    "SentimentAnalyzer",
+    "SummarizationModel",
+    "TextClassifier",
+    "TextPreprocessor",
+    "UnsupportedTaskError",
     "__author__",
     "__email__",
-    "Pipeline",
-    "TextPreprocessor",
-    "TextClassifier",
-    "NERModel",
-    "SentimentAnalyzer",
-    "EmbeddingModel",
-    "QuestionAnsweringModel",
-    "SummarizationModel",
+    "__version__",
+    "download_model",
+    "get_available_models",
     "load_model",
     "save_model",
-    "get_available_models",
-    "download_model",
 ]

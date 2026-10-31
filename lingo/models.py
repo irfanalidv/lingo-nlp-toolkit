@@ -17,6 +17,8 @@ from transformers import (
     pipeline,
 )
 
+from .exceptions import InvalidInputError
+
 logger = logging.getLogger(__name__)
 
 
@@ -54,7 +56,9 @@ class BaseModel:
             self.tokenizer = AutoTokenizer.from_pretrained(source, cache_dir=self.cache_dir)
             self.model = model_cls.from_pretrained(source, cache_dir=self.cache_dir)
             self.model.to(self.device)
-            self.pipeline = pipeline(
+            # ``pipeline`` is overloaded on Literal task names; ``hf_task`` is a plain str
+            build_pipeline: Any = pipeline
+            self.pipeline = build_pipeline(
                 hf_task,
                 model=self.model,
                 tokenizer=self.tokenizer,
@@ -63,9 +67,9 @@ class BaseModel:
                 # forwarded to the Hugging Face pipeline (e.g. aggregation_strategy="simple").
                 **self.kwargs,
             )
-            logger.info(f"Loaded {hf_task} model: {source}")
+            logger.info("Loaded %s model: %s", hf_task, source)
         except Exception as e:
-            logger.error(f"Error loading model {source}: {e}")
+            logger.error("Error loading model %s: %s", source, e)
             raise
 
     def _run_pipeline(self, inputs: str | list[str], **kwargs: Any) -> list[Any]:
@@ -77,7 +81,7 @@ class BaseModel:
             results = [results]
         return results
 
-    def __call__(self, inputs: Any, **kwargs: Any) -> Any:
+    def __call__(self, *args: Any, **kwargs: Any) -> Any:
         """Process inputs through the model."""
         raise NotImplementedError
 
@@ -100,17 +104,17 @@ class BaseModel:
             "kwargs": self.kwargs,
         }
 
-        with open(path / "model_config.json", "w") as f:
+        with (path / "model_config.json").open("w", encoding="utf-8") as f:
             json.dump(config, f, indent=2)
 
-        logger.info(f"Model saved to {path}")
+        logger.info("Model saved to %s", path)
 
     def load(self, path: str | Path) -> None:
         """Load model weights and configuration previously written by :meth:`save`."""
         path = Path(path)
 
         # Load configuration
-        with open(path / "model_config.json") as f:
+        with (path / "model_config.json").open(encoding="utf-8") as f:
             config = json.load(f)
 
         self.config = config["config"]
@@ -122,7 +126,7 @@ class BaseModel:
         self._load_model()
         self.model_name = config["model_name"]
 
-        logger.info(f"Model loaded from {path}")
+        logger.info("Model loaded from %s", path)
 
 
 class TextClassifier(BaseModel):
@@ -200,10 +204,10 @@ class EmbeddingModel(BaseModel):
             self.model = SentenceTransformer(self.model_name, cache_folder=self.cache_dir)
             self.model.to(self.device)
 
-            logger.info(f"Loaded embedding model: {self.model_name}")
+            logger.info("Loaded embedding model: %s", self.model_name)
 
         except Exception as e:
-            logger.error(f"Error loading model {self.model_name}: {e}")
+            logger.error("Error loading model %s: %s", self.model_name, e)
             raise
 
     def __call__(self, inputs: str | list[str], **kwargs: Any) -> list[float] | list[list[float]]:
@@ -237,9 +241,9 @@ class EmbeddingModel(BaseModel):
             "device": self.device,
             "kwargs": self.kwargs,
         }
-        with open(path / "model_config.json", "w") as f:
+        with (path / "model_config.json").open("w", encoding="utf-8") as f:
             json.dump(config, f, indent=2)
-        logger.info(f"Model saved to {path}")
+        logger.info("Model saved to %s", path)
 
     def similarity(self, text1: str, text2: str, **kwargs: Any) -> float:
         """
@@ -259,11 +263,14 @@ class EmbeddingModel(BaseModel):
         emb2 = self(text2, **kwargs)
 
         # Convert to numpy arrays and ensure 1D
-        emb1 = np.array(emb1).flatten()
-        emb2 = np.array(emb2).flatten()
+        vec1 = np.asarray(emb1, dtype=float).flatten()
+        vec2 = np.asarray(emb2, dtype=float).flatten()
 
-        # Calculate cosine similarity
-        cos_sim = np.dot(emb1, emb2) / (np.linalg.norm(emb1) * np.linalg.norm(emb2))
+        # Calculate cosine similarity (0.0 for an all-zero vector instead of NaN)
+        norm = np.linalg.norm(vec1) * np.linalg.norm(vec2)
+        if norm == 0:
+            return 0.0
+        cos_sim = np.dot(vec1, vec2) / norm
 
         return float(cos_sim)
 
@@ -287,9 +294,9 @@ class QuestionAnsweringModel(BaseModel):
             )
             self.model.to(self.device)
             self.model.eval()
-            logger.info(f"Loaded question-answering model: {source}")
+            logger.info("Loaded question-answering model: %s", source)
         except Exception as e:
-            logger.error(f"Error loading model {source}: {e}")
+            logger.error("Error loading model %s: %s", source, e)
             raise
 
     def __call__(
@@ -318,7 +325,7 @@ class QuestionAnsweringModel(BaseModel):
         import torch
 
         if not question or not context:
-            raise ValueError("Both 'question' and 'context' must be non-empty strings")
+            raise InvalidInputError("Both 'question' and 'context' must be non-empty strings")
 
         encoding = self.tokenizer(
             question,
@@ -390,9 +397,9 @@ class SummarizationModel(BaseModel):
             self.model = AutoModelForSeq2SeqLM.from_pretrained(source, cache_dir=self.cache_dir)
             self.model.to(self.device)
             self.model.eval()
-            logger.info(f"Loaded summarization model: {source}")
+            logger.info("Loaded summarization model: %s", source)
         except Exception as e:
-            logger.error(f"Error loading model {source}: {e}")
+            logger.error("Error loading model %s: %s", source, e)
             raise
 
     def __call__(self, inputs: str | list[str], **kwargs: Any) -> list[dict[str, Any]]:
