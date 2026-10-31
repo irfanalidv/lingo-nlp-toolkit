@@ -3,18 +3,18 @@ Text preprocessing module for Lingo NLP toolkit.
 Handles text normalization, cleaning, and tokenization.
 """
 
-import re
-import logging
-from typing import List, Dict, Any, Optional, Union
-from pathlib import Path
 import json
+import logging
+import re
 import unicodedata
+from pathlib import Path
+from typing import Any
 
 import nltk
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer, PorterStemmer
-from nltk.tokenize import word_tokenize, sent_tokenize
 import spacy
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.tokenize import sent_tokenize, word_tokenize
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ class TextPreprocessor:
 
     def __init__(
         self,
-        config: Optional[Dict[str, Any]] = None,
+        config: dict[str, Any] | None = None,
         device: str = "cpu",
         language: str = "english",
     ):
@@ -71,28 +71,23 @@ class TextPreprocessor:
         """Initialize NLTK components and download required data."""
         try:
             # Try to find required NLTK data
-            required_packages = ["punkt", "stopwords", "wordnet", "punkt_tab"]
+            from .setup_utils import NLTK_RESOURCES
 
-            for package in required_packages:
+            for package, resource_path in NLTK_RESOURCES.items():
                 try:
-                    if package in ["punkt", "punkt_tab"]:
-                        nltk.data.find(f"tokenizers/{package}")
-                    else:
-                        nltk.data.find(f"corpora/{package}")
+                    nltk.data.find(resource_path)
                 except LookupError:
                     logger.info(f"Downloading NLTK package: {package}")
                     nltk.download(package, quiet=True)
 
         except Exception as e:
             logger.warning(f"Failed to initialize NLTK: {e}")
-            logger.warning(
-                "Some NLTK features may not work. Run 'lingo setup' to fix this."
-            )
+            logger.warning("Some NLTK features may not work. Run 'lingo setup' to fix this.")
 
     def _init_spacy(self):
         """Initialize spaCy model."""
+        model_name = self.config.get("spacy_model", "en_core_web_sm")
         try:
-            model_name = self.config.get("spacy_model", "en_core_web_sm")
             self.spacy_model = spacy.load(model_name)
             logger.info(f"Loaded spaCy model: {model_name}")
         except OSError:
@@ -109,15 +104,10 @@ class TextPreprocessor:
         # Initialize subword tokenizers if specified
         self.subword_tokenizer = None
         if self.config.get("use_subword_tokenization", False):
-            try:
-                from tokenizers import Tokenizer
-
-                # This would be configured based on the specific model
-                pass
-            except ImportError:
-                logger.warning(
-                    "tokenizers library not available for subword tokenization"
-                )
+            logger.warning(
+                "use_subword_tokenization is not implemented yet; "
+                "use a model tokenizer from transformers instead"
+            )
 
     def _load_stopwords(self):
         """Load stopwords for the specified language."""
@@ -127,7 +117,7 @@ class TextPreprocessor:
             logger.warning(f"Stopwords for language '{self.language}' not found")
             self.stopwords = set()
 
-    def __call__(self, texts: Union[str, List[str]]) -> Union[str, List[str]]:
+    def __call__(self, texts: str | list[str]) -> str | list[str]:
         """
         Apply preprocessing pipeline to input text(s).
 
@@ -242,7 +232,7 @@ class TextPreprocessor:
         """Remove extra whitespace."""
         return re.sub(r"\s+", " ", text)
 
-    def tokenize_words(self, text: str) -> List[str]:
+    def tokenize_words(self, text: str) -> list[str]:
         """Tokenize text into words."""
         if self.spacy_model:
             doc = self.spacy_model(text)
@@ -250,29 +240,29 @@ class TextPreprocessor:
         else:
             return self.word_tokenizer(text)
 
-    def tokenize_sentences(self, text: str) -> List[str]:
+    def tokenize_sentences(self, text: str) -> list[str]:
         """Tokenize text into sentences."""
         return self.sent_tokenizer(text)
 
-    def remove_stopwords(self, tokens: List[str]) -> List[str]:
+    def remove_stopwords(self, tokens: list[str]) -> list[str]:
         """Remove stopwords from token list."""
         if not self.stopwords:
             return tokens
         return [token for token in tokens if token.lower() not in self.stopwords]
 
-    def lemmatize_tokens(self, tokens: List[str]) -> List[str]:
+    def lemmatize_tokens(self, tokens: list[str]) -> list[str]:
         """Lemmatize tokens."""
         if not self.lemmatizer:
             return tokens
         return [self.lemmatizer.lemmatize(token) for token in tokens]
 
-    def stem_tokens(self, tokens: List[str]) -> List[str]:
+    def stem_tokens(self, tokens: list[str]) -> list[str]:
         """Stem tokens."""
         if not self.stemmer:
             return tokens
         return [self.stemmer.stem(token) for token in tokens]
 
-    def get_preprocessing_pipeline(self, text: str) -> Dict[str, Any]:
+    def get_preprocessing_pipeline(self, text: str) -> dict[str, Any]:
         """
         Get complete preprocessing pipeline results.
 
@@ -309,7 +299,7 @@ class TextPreprocessor:
 
         return result
 
-    def save(self, path: Union[str, Path]):
+    def save(self, path: str | Path):
         """Save preprocessor configuration."""
         path = Path(path)
         path.mkdir(parents=True, exist_ok=True)
@@ -326,11 +316,11 @@ class TextPreprocessor:
         logger.info(f"Preprocessor saved to {path}")
 
     @classmethod
-    def load(cls, path: Union[str, Path]) -> "TextPreprocessor":
+    def load(cls, path: str | Path) -> "TextPreprocessor":
         """Load preprocessor from disk."""
         path = Path(path)
 
-        with open(path / "preprocessor_config.json", "r") as f:
+        with open(path / "preprocessor_config.json") as f:
             config = json.load(f)
 
         preprocessor = cls(

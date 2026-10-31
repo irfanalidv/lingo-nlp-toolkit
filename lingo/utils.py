@@ -5,24 +5,23 @@ Provides helper functions for model management, evaluation, and common operation
 
 import logging
 import os
-import json
 import re
-from typing import Any, Dict, List, Optional, Union, Tuple
 from pathlib import Path
+from typing import Any
+
 import requests
-from tqdm import tqdm
-import numpy as np
 from sklearn.metrics import (
     accuracy_score,
-    precision_recall_fscore_support,
-    confusion_matrix,
     classification_report,
+    confusion_matrix,
+    precision_recall_fscore_support,
 )
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
 
-def load_model(path: Union[str, Path]) -> Any:
+def load_model(path: str | Path) -> Any:
     """
     Load a saved model from disk.
 
@@ -52,7 +51,7 @@ def load_model(path: Union[str, Path]) -> Any:
         raise ValueError(f"Invalid model path: {path}")
 
 
-def save_model(model: Any, path: Union[str, Path]):
+def save_model(model: Any, path: str | Path):
     """
     Save a model to disk.
 
@@ -68,7 +67,7 @@ def save_model(model: Any, path: Union[str, Path]):
         raise ValueError("Model does not have a save method")
 
 
-def get_available_models() -> Dict[str, List[str]]:
+def get_available_models() -> dict[str, list[str]]:
     """
     Get list of available pre-trained models for different tasks.
 
@@ -101,13 +100,13 @@ def get_available_models() -> Dict[str, List[str]]:
         "question-answering": [
             "deepset/roberta-base-squad2",
             "distilbert-base-cased-distilled-squad",
-            "microsoft/DialoGPT-medium",
+            "deepset/minilm-uncased-squad2",
         ],
         "summarization": ["facebook/bart-large-cnn", "t5-base", "google/pegasus-xsum"],
     }
 
 
-def download_model(model_name: str, cache_dir: Optional[str] = None) -> str:
+def download_model(model_name: str, cache_dir: str | None = None) -> str:
     """
     Download a model from Hugging Face Hub.
 
@@ -118,14 +117,14 @@ def download_model(model_name: str, cache_dir: Optional[str] = None) -> str:
     Returns:
         Path to the downloaded model
     """
-    from transformers import AutoTokenizer, AutoModel
+    from transformers import AutoModel, AutoTokenizer
 
     try:
         # Download tokenizer
-        tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
+        AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
 
         # Download model (this will cache it)
-        model = AutoModel.from_pretrained(model_name, cache_dir=cache_dir)
+        AutoModel.from_pretrained(model_name, cache_dir=cache_dir)
 
         logger.info(f"Successfully downloaded model: {model_name}")
 
@@ -143,8 +142,8 @@ def download_model(model_name: str, cache_dir: Optional[str] = None) -> str:
 
 
 def evaluate_classification(
-    y_true: List[Any], y_pred: List[Any], labels: Optional[List[Any]] = None
-) -> Dict[str, Any]:
+    y_true: list[Any], y_pred: list[Any], labels: list[Any] | None = None
+) -> dict[str, Any]:
     """
     Evaluate classification performance.
 
@@ -173,8 +172,9 @@ def evaluate_classification(
 
     # Per-class metrics
     if labels:
+        # Pass labels explicitly so per-class scores line up with the given label order
         per_class = precision_recall_fscore_support(
-            y_true, y_pred, average=None, zero_division=0
+            y_true, y_pred, labels=labels, average=None, zero_division=0
         )
         metrics["per_class"] = {
             label: {
@@ -187,21 +187,19 @@ def evaluate_classification(
         }
 
     # Confusion matrix
-    metrics["confusion_matrix"] = confusion_matrix(
-        y_true, y_pred, labels=labels
-    ).tolist()
+    metrics["confusion_matrix"] = confusion_matrix(y_true, y_pred, labels=labels).tolist()
 
     # Classification report
     metrics["classification_report"] = classification_report(
-        y_true, y_pred, labels=labels, output_dict=True
+        y_true, y_pred, labels=labels, output_dict=True, zero_division=0
     )
 
     return metrics
 
 
 def evaluate_ner(
-    y_true: List[List[Dict[str, Any]]], y_pred: List[List[Dict[str, Any]]]
-) -> Dict[str, Any]:
+    y_true: list[list[dict[str, Any]]], y_pred: list[list[dict[str, Any]]]
+) -> dict[str, Any]:
     """
     Evaluate NER performance.
 
@@ -220,7 +218,7 @@ def evaluate_ner(
 
     # Simple overlap-based evaluation
     correct = 0
-    for true_entities, pred_entities in zip(y_true, y_pred):
+    for true_entities, pred_entities in zip(y_true, y_pred, strict=False):
         for true_entity in true_entities:
             for pred_entity in pred_entities:
                 if (
@@ -233,9 +231,7 @@ def evaluate_ner(
 
     precision = correct / total_pred if total_pred > 0 else 0
     recall = correct / total_true if total_true > 0 else 0
-    f1 = (
-        2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
-    )
+    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
 
     return {
         "precision": precision,
@@ -247,7 +243,7 @@ def evaluate_ner(
     }
 
 
-def batch_texts(texts: List[str], batch_size: int = 32) -> List[List[str]]:
+def batch_texts(texts: list[str], batch_size: int = 32) -> list[list[str]]:
     """
     Split texts into batches.
 
@@ -263,7 +259,7 @@ def batch_texts(texts: List[str], batch_size: int = 32) -> List[List[str]]:
 
 def chunk_text(
     text: str, max_length: int = 512, overlap: int = 50, separator: str = "\n"
-) -> List[str]:
+) -> list[str]:
     """
     Split long text into overlapping chunks.
 
@@ -310,7 +306,10 @@ def clean_text(text: str) -> str:
     Returns:
         Cleaned text
     """
-    import re
+    # Normalize curly quotes to their ASCII equivalents (before stripping symbols,
+    # otherwise they would be removed instead of normalized)
+    text = text.replace("\u201c", '"').replace("\u201d", '"')
+    text = text.replace("\u2018", "'").replace("\u2019", "'")
 
     # Remove extra whitespace
     text = re.sub(r"\s+", " ", text)
@@ -318,14 +317,10 @@ def clean_text(text: str) -> str:
     # Remove special characters (keep alphanumeric, spaces, and basic punctuation)
     text = re.sub(r'[^\w\s.,!?;:()"\'-]', "", text)
 
-    # Normalize quotes
-    text = text.replace('"', '"').replace('"', '"')
-    text = text.replace(""", "'").replace(""", "'")
-
     return text.strip()
 
 
-def get_text_statistics(text: str) -> Dict[str, Any]:
+def get_text_statistics(text: str) -> dict[str, Any]:
     """
     Get basic statistics about a text.
 

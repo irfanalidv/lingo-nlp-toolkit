@@ -5,6 +5,55 @@ All notable changes to the Lingo NLP Toolkit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-10-31
+
+### Fixed
+
+- **Question answering and summarization on transformers 5**: transformers 5 removed the
+  `question-answering` and `summarization` pipelines, so both tasks raised `KeyError`.
+  They are now implemented directly on `AutoModelForQuestionAnswering` /
+  `AutoModelForSeq2SeqLM` and work on transformers 4.x and 5.x (long QA contexts are
+  split into overlapping windows; T5-style prefixes are applied automatically).
+- **Pipeline lowercased all input by default**, which badly degraded cased models
+  (e.g. `dslim/bert-base-NER` returned word-piece fragments). Pipelines now only normalize
+  Unicode and whitespace unless `config["preprocessing"]` says otherwise.
+- **Embedding pipeline on a single string returned one float** instead of the vector.
+- **`batch_predict` crashed** when the last batch had a single item.
+- **`Pipeline.load` ignored saved weights** (it re-downloaded the model by name) and
+  discarded the saved preprocessor config. It now loads from the saved directory.
+- **`evaluate_classification` per-class metrics were mismatched** with the given labels
+  (sklearn sorted labels alphabetically).
+- `clean_text` curly-quote normalization was a no-op; it now converts curly quotes to ASCII.
+- `lingo setup` re-downloaded NLTK stopwords/wordnet every run (wrong lookup path) and used
+  `os.system("python ...")` instead of the current interpreter.
+- CLI output failed on numpy scalars (`json` serialization); `--verbose` before the
+  subcommand was ignored.
+- `get_available_models()` listed `microsoft/DialoGPT-medium` (a chat model) for question
+  answering; replaced with `deepset/minilm-uncased-squad2`.
+- Constructor keyword arguments (e.g. `aggregation_strategy="simple"` for NER) are now
+  forwarded to the Hugging Face pipeline.
+
+### Added
+
+- `lingo run question-answering --question ...` and `lingo --version`.
+- `lingo.__version__` is read from package metadata.
+- Offline test suite (42 tests) covering Pipeline, model wrappers, save/load, CLI and utilities.
+- GitHub Actions CI (lint + tests on Python 3.10-3.13), Ruff config, community files
+  (CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, issue/PR templates, Dependabot, CITATION.cff).
+
+### Changed
+
+- Packaging consolidated into `pyproject.toml` (PEP 639 `license = "MIT"`); removed
+  `setup.py`, the `setup_*.py` variants, `requirements.txt` and committed build artifacts.
+- Requires Python 3.10+ (3.10-3.13 supported).
+- Dropped unused core dependencies (`fastapi`, `uvicorn`, `pandas`, `scipy`, `pydantic`,
+  `beautifulsoup4`, `lxml`, `tokenizers` pin). FastAPI/uvicorn are now in the `api` extra and
+  pandas in the `examples` extra; unused heavy packages were removed from `full`.
+- Linting switched from black/isort/flake8 to Ruff (`make lint` / `make format`).
+- README: corrected example outputs to verified values; removed claims for features that do
+  not exist (fine-tuning, Hub export, mixed precision, async batching) and the unverified
+  benchmark table.
+
 ## [2.3] - 2025-01-15
 
 ### Added

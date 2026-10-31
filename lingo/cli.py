@@ -8,22 +8,21 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import List, Optional
+from typing import Any
 
+from . import __version__
 from .core import Pipeline
-from .utils import get_available_models, download_model
-from .setup_utils import setup_lingo_environment, check_lingo_environment
+from .setup_utils import setup_lingo_environment
+from .utils import download_model, get_available_models
 
 
-def setup_logging(verbose: bool = False):
+def setup_logging(verbose: bool = False) -> None:
     """Setup logging configuration."""
     level = logging.DEBUG if verbose else logging.INFO
-    logging.basicConfig(
-        level=level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    logging.basicConfig(level=level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 
-def list_models():
+def list_models() -> None:
     """List available models for different tasks."""
     models = get_available_models()
 
@@ -36,7 +35,16 @@ def list_models():
         print()
 
 
-def run_pipeline(args):
+def _json_default(obj: Any) -> Any:
+    """Make numpy scalars/arrays returned by HF pipelines JSON serializable."""
+    if hasattr(obj, "tolist"):
+        return obj.tolist()
+    if hasattr(obj, "item"):
+        return obj.item()
+    raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
+
+
+def run_pipeline(args: argparse.Namespace) -> int:
     """Run a specific NLP pipeline."""
     try:
         # Create pipeline
@@ -49,7 +57,7 @@ def run_pipeline(args):
 
         # Process input
         if args.input_file:
-            with open(args.input_file, "r", encoding="utf-8") as f:
+            with open(args.input_file, encoding="utf-8") as f:
                 text = f.read().strip()
         elif args.text:
             text = args.text
@@ -62,15 +70,23 @@ def run_pipeline(args):
             return 1
 
         # Run inference
-        result = pipeline(text)
+        if args.task == "question-answering":
+            if not args.question:
+                print(
+                    "Error: question-answering requires --question (the input text is the context)"
+                )
+                return 1
+            result = pipeline(question=args.question, context=text)
+        else:
+            result = pipeline(text)
 
         # Output results
         if args.output_file:
             with open(args.output_file, "w", encoding="utf-8") as f:
-                json.dump(result, f, indent=2)
+                json.dump(result, f, indent=2, default=_json_default)
             print(f"Results saved to {args.output_file}")
         else:
-            print(json.dumps(result, indent=2))
+            print(json.dumps(result, indent=2, default=_json_default))
 
         return 0
 
@@ -83,7 +99,7 @@ def run_pipeline(args):
         return 1
 
 
-def setup_cmd(args):
+def setup_cmd(args: argparse.Namespace) -> int:
     """Set up Lingo environment."""
     try:
         if args.force:
@@ -111,7 +127,7 @@ def setup_cmd(args):
         return 1
 
 
-def download_model_cmd(args):
+def download_model_cmd(args: argparse.Namespace) -> int:
     """Download a model from Hugging Face Hub."""
     try:
         print(f"Downloading model: {args.model}")
@@ -123,7 +139,7 @@ def download_model_cmd(args):
         return 1
 
 
-def main():
+def main(argv: list[str] | None = None) -> int:
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
         description="Lingo: Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready",
@@ -153,21 +169,17 @@ Examples:
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # List models command
-    list_parser = subparsers.add_parser("list-models", help="List available models")
+    subparsers.add_parser("list-models", help="List available models")
 
     # Setup command
     setup_parser = subparsers.add_parser(
         "setup", help="Set up Lingo environment (download required data)"
     )
-    setup_parser.add_argument(
-        "--force", action="store_true", help="Force re-download of all data"
-    )
+    setup_parser.add_argument("--force", action="store_true", help="Force re-download of all data")
 
     # Download model command
     download_parser = subparsers.add_parser("download-model", help="Download a model")
-    download_parser.add_argument(
-        "--model", required=True, help="Model name to download"
-    )
+    download_parser.add_argument("--model", required=True, help="Model name to download")
     download_parser.add_argument("--cache-dir", help="Directory to cache the model")
 
     # Run pipeline command
@@ -186,6 +198,9 @@ Examples:
     )
     run_parser.add_argument("--model", required=True, help="Model to use")
     run_parser.add_argument("--text", help="Input text")
+    run_parser.add_argument(
+        "--question", help="Question to answer (question-answering task; input text is the context)"
+    )
     run_parser.add_argument("--input-file", help="Input file path")
     run_parser.add_argument("--output-file", help="Output file path")
     run_parser.add_argument(
@@ -196,13 +211,18 @@ Examples:
     )
     run_parser.add_argument("--cache-dir", help="Directory to cache models")
     run_parser.add_argument(
-        "--verbose", "-v", action="store_true", help="Verbose output"
+        "--verbose",
+        "-v",
+        action="store_true",
+        default=argparse.SUPPRESS,
+        help="Verbose output",
     )
 
     # Global options
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     # Setup logging
     setup_logging(args.verbose)

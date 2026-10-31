@@ -6,10 +6,6 @@ Demonstrating all features and capabilities of the Lingo toolkit.
 
 import json
 import time
-import asyncio
-from pathlib import Path
-from typing import List, Dict, Any, Union
-from datetime import datetime
 
 
 def print_header(title: str):
@@ -98,9 +94,7 @@ def showcase_text_preprocessing():
                 print(f"   📊 Sentences: {results['sentence_count']}")
 
                 if results.get("words_no_stopwords"):
-                    print(
-                        f"   🚫 No stopwords: {len(results['words_no_stopwords'])} tokens"
-                    )
+                    print(f"   🚫 No stopwords: {len(results['words_no_stopwords'])} tokens")
 
                 if results.get("lemmatized"):
                     print(f"   🔍 Lemmatized: {results['lemmatized'][:5]}...")
@@ -181,13 +175,13 @@ def showcase_sentiment_analysis():
 
             # Confidence interpretation
             if confidence > 0.9:
-                print(f"   🎯 Very confident prediction")
+                print("   🎯 Very confident prediction")
             elif confidence > 0.7:
-                print(f"   ✅ Confident prediction")
+                print("   ✅ Confident prediction")
             elif confidence > 0.5:
-                print(f"   ⚠️  Moderate confidence")
+                print("   ⚠️  Moderate confidence")
             else:
-                print(f"   ❓ Low confidence - may need review")
+                print("   ❓ Low confidence - may need review")
 
         # Summary statistics
         print_section("Sentiment Analysis Summary")
@@ -196,13 +190,13 @@ def showcase_sentiment_analysis():
 
         print(f"📊 Total texts analyzed: {total_texts}")
         print(
-            f"😊 Positive: {results_summary['POSITIVE']} ({results_summary['POSITIVE']/total_texts*100:.1f}%)"
+            f"😊 Positive: {results_summary['POSITIVE']} ({results_summary['POSITIVE'] / total_texts * 100:.1f}%)"
         )
         print(
-            f"😞 Negative: {results_summary['NEGATIVE']} ({results_summary['NEGATIVE']/total_texts*100:.1f}%)"
+            f"😞 Negative: {results_summary['NEGATIVE']} ({results_summary['NEGATIVE'] / total_texts * 100:.1f}%)"
         )
         print(
-            f"😐 Neutral: {results_summary['NEUTRAL']} ({results_summary['NEUTRAL']/total_texts*100:.1f}%)"
+            f"😐 Neutral: {results_summary['NEUTRAL']} ({results_summary['NEUTRAL'] / total_texts * 100:.1f}%)"
         )
         print(f"📈 Average confidence: {avg_confidence:.3f}")
 
@@ -295,7 +289,7 @@ def showcase_named_entity_recognition():
         # Entity analysis summary
         print_section("Entity Analysis Summary")
         print(f"📊 Total entities extracted: {total_entities}")
-        print(f"📝 Average entities per text: {total_entities/len(ner_texts):.1f}")
+        print(f"📝 Average entities per text: {total_entities / len(ner_texts):.1f}")
 
         print("\nEntity type distribution:")
         for entity_type, entities in entity_statistics.items():
@@ -307,9 +301,7 @@ def showcase_named_entity_recognition():
         print_section("Most Common Entities")
         for entity_type, entities in entity_statistics.items():
             if entities:
-                sorted_entities = sorted(
-                    entities.items(), key=lambda x: x[1], reverse=True
-                )
+                sorted_entities = sorted(entities.items(), key=lambda x: x[1], reverse=True)
                 print(f"\n{entity_type}:")
                 for entity, count in sorted_entities[:5]:
                     print(f"   {entity}: {count} occurrences")
@@ -377,11 +369,11 @@ def showcase_text_classification():
 
             # Confidence interpretation
             if confidence > 0.8:
-                print(f"   🎯 High confidence classification")
+                print("   🎯 High confidence classification")
             elif confidence > 0.6:
-                print(f"   ✅ Good confidence classification")
+                print("   ✅ Good confidence classification")
             else:
-                print(f"   ⚠️  Low confidence - may need review")
+                print("   ⚠️  Low confidence - may need review")
 
         # Classification analysis
         print_section("Classification Analysis")
@@ -396,7 +388,7 @@ def showcase_text_classification():
             avg_confidence = sum(r["confidence"] for r in results) / count
             avg_time = sum(r["processing_time"] for r in results) / count
 
-            print(f"   {category}: {count} texts ({count/total_texts*100:.1f}%)")
+            print(f"   {category}: {count} texts ({count / total_texts * 100:.1f}%)")
             print(f"     Average confidence: {avg_confidence:.3f}")
             print(f"     Average processing time: {avg_time:.3f}s")
 
@@ -412,8 +404,9 @@ def showcase_embeddings_and_similarity():
     print_header("Text Embeddings & Semantic Similarity")
 
     try:
-        from lingo import Pipeline
         import numpy as np
+
+        from lingo import Pipeline
 
         # Diverse texts for similarity analysis
         similarity_texts = [
@@ -441,7 +434,7 @@ def showcase_embeddings_and_similarity():
         embedding_times = []
 
         for i, text in enumerate(similarity_texts):
-            print(f"📝 Text {i+1}: {text}")
+            print(f"📝 Text {i + 1}: {text}")
 
             start_time = time.time()
             embedding = embedding_pipeline(text)
@@ -469,11 +462,11 @@ def showcase_embeddings_and_similarity():
         print("Similarity Matrix (higher values = more similar):")
         print("      ", end="")
         for i in range(len(similarity_texts)):
-            print(f"T{i+1:2d} ", end="")
+            print(f"T{i + 1:2d} ", end="")
         print()
 
         for i in range(len(similarity_texts)):
-            print(f"T{i+1:2d} ", end="")
+            print(f"T{i + 1:2d} ", end="")
             for j in range(len(similarity_texts)):
                 print(f"{similarity_matrix[i][j]:.2f} ", end="")
             print()
@@ -491,8 +484,8 @@ def showcase_embeddings_and_similarity():
         print("Top 5 most similar pairs:")
         for rank, (i, j, similarity) in enumerate(most_similar[:5], 1):
             print(f"{rank}. Similarity {similarity:.3f}:")
-            print(f"   Text {i+1}: {similarity_texts[i]}")
-            print(f"   Text {j+1}: {similarity_texts[j]}")
+            print(f"   Text {i + 1}: {similarity_texts[i]}")
+            print(f"   Text {j + 1}: {similarity_texts[j]}")
 
         # Clustering analysis
         print_section("Text Clustering Analysis")
@@ -519,7 +512,7 @@ def showcase_embeddings_and_similarity():
 
         print(f"Found {len(clusters)} clusters with similarity > {threshold}:")
         for i, cluster in enumerate(clusters, 1):
-            print(f"   Cluster {i}: Texts {[idx+1 for idx in cluster]}")
+            print(f"   Cluster {i}: Texts {[idx + 1 for idx in cluster]}")
             print(f"     Representative: {similarity_texts[cluster[0]]}")
 
         # Performance metrics
@@ -530,9 +523,7 @@ def showcase_embeddings_and_similarity():
         print(f"📊 Total embedding time: {total_embedding_time:.3f}s")
         print(f"⚡ Average embedding time: {avg_embedding_time:.3f}s")
         print(f"🔢 Total embeddings generated: {len(embeddings)}")
-        print(
-            f"🚀 Throughput: {len(embeddings)/total_embedding_time:.1f} embeddings/second"
-        )
+        print(f"🚀 Throughput: {len(embeddings) / total_embedding_time:.1f} embeddings/second")
 
         return True
 
@@ -550,16 +541,16 @@ def showcase_question_answering():
 
         # Context and diverse questions
         context = """
-        Artificial Intelligence (AI) has emerged as one of the most transformative technologies of the 21st century. 
-        It encompasses a wide range of capabilities including machine learning, natural language processing, computer vision, 
-        and robotics. AI systems can now perform tasks that were once thought to be exclusively human, such as recognizing 
-        speech, translating languages, making decisions, and solving complex problems. The technology has applications 
-        across virtually every industry, from healthcare and finance to transportation and entertainment. Machine learning, 
-        a subset of AI, enables computers to learn and improve from experience without being explicitly programmed. 
-        Deep learning, which uses neural networks with multiple layers, has been particularly successful in areas like 
-        image recognition and natural language understanding. However, the rapid advancement of AI also raises important 
-        questions about ethics, privacy, job displacement, and the future of human work. As AI continues to evolve, 
-        it will be crucial to develop frameworks for responsible AI development and deployment that maximize benefits 
+        Artificial Intelligence (AI) has emerged as one of the most transformative technologies of the 21st century.
+        It encompasses a wide range of capabilities including machine learning, natural language processing, computer vision,
+        and robotics. AI systems can now perform tasks that were once thought to be exclusively human, such as recognizing
+        speech, translating languages, making decisions, and solving complex problems. The technology has applications
+        across virtually every industry, from healthcare and finance to transportation and entertainment. Machine learning,
+        a subset of AI, enables computers to learn and improve from experience without being explicitly programmed.
+        Deep learning, which uses neural networks with multiple layers, has been particularly successful in areas like
+        image recognition and natural language understanding. However, the rapid advancement of AI also raises important
+        questions about ethics, privacy, job displacement, and the future of human work. As AI continues to evolve,
+        it will be crucial to develop frameworks for responsible AI development and deployment that maximize benefits
         while minimizing potential risks and ensuring that the technology serves humanity's best interests.
         """
 
@@ -577,9 +568,7 @@ def showcase_question_answering():
         ]
 
         # Create QA pipeline
-        qa_pipeline = Pipeline(
-            task="question-answering", model="deepset/roberta-base-squad2"
-        )
+        qa_pipeline = Pipeline(task="question-answering", model="deepset/roberta-base-squad2")
 
         print_section("Context")
         print(f"Length: {len(context.split())} words")
@@ -617,11 +606,11 @@ def showcase_question_answering():
 
             # Confidence interpretation
             if result["score"] > 0.8:
-                print(f"   🎯 High confidence answer")
+                print("   🎯 High confidence answer")
             elif result["score"] > 0.6:
-                print(f"   ✅ Good confidence answer")
+                print("   ✅ Good confidence answer")
             else:
-                print(f"   ⚠️  Low confidence - answer may be unreliable")
+                print("   ⚠️  Low confidence - answer may be unreliable")
 
         # QA Analysis
         print_section("Question Answering Analysis")
@@ -634,7 +623,7 @@ def showcase_question_answering():
         print(f"📈 Average confidence: {avg_confidence:.3f}")
         print(f"⏱️  Total processing time: {total_qa_time:.3f}s")
         print(f"⚡ Average processing time: {avg_processing_time:.3f}s")
-        print(f"🚀 Questions per second: {total_questions/total_qa_time:.1f}")
+        print(f"🚀 Questions per second: {total_questions / total_qa_time:.1f}")
 
         # Answer quality analysis
         print_section("Answer Quality Analysis")
@@ -644,13 +633,13 @@ def showcase_question_answering():
         low_confidence = sum(1 for r in qa_results if r["confidence"] < 0.6)
 
         print(
-            f"🎯 High confidence answers (>0.8): {high_confidence} ({high_confidence/total_questions*100:.1f}%)"
+            f"🎯 High confidence answers (>0.8): {high_confidence} ({high_confidence / total_questions * 100:.1f}%)"
         )
         print(
-            f"✅ Medium confidence answers (0.6-0.8): {medium_confidence} ({medium_confidence/total_questions*100:.1f}%)"
+            f"✅ Medium confidence answers (0.6-0.8): {medium_confidence} ({medium_confidence / total_questions * 100:.1f}%)"
         )
         print(
-            f"⚠️  Low confidence answers (<0.6): {low_confidence} ({low_confidence/total_questions*100:.1f}%)"
+            f"⚠️  Low confidence answers (<0.6): {low_confidence} ({low_confidence / total_questions * 100:.1f}%)"
         )
 
         return True
@@ -670,47 +659,47 @@ def showcase_text_summarization():
         # Long texts for summarization
         long_texts = [
             """
-            Artificial Intelligence (AI) has emerged as one of the most transformative technologies of the 21st century. 
-            It encompasses a wide range of capabilities including machine learning, natural language processing, computer vision, 
-            and robotics. AI systems can now perform tasks that were once thought to be exclusively human, such as recognizing 
-            speech, translating languages, making decisions, and solving complex problems. The technology has applications 
-            across virtually every industry, from healthcare and finance to transportation and entertainment. Machine learning, 
-            a subset of AI, enables computers to learn and improve from experience without being explicitly programmed. 
-            Deep learning, which uses neural networks with multiple layers, has been particularly successful in areas like 
-            image recognition and natural language understanding. However, the rapid advancement of AI also raises important 
-            questions about ethics, privacy, job displacement, and the future of human work. As AI continues to evolve, 
-            it will be crucial to develop frameworks for responsible AI development and deployment that maximize benefits 
+            Artificial Intelligence (AI) has emerged as one of the most transformative technologies of the 21st century.
+            It encompasses a wide range of capabilities including machine learning, natural language processing, computer vision,
+            and robotics. AI systems can now perform tasks that were once thought to be exclusively human, such as recognizing
+            speech, translating languages, making decisions, and solving complex problems. The technology has applications
+            across virtually every industry, from healthcare and finance to transportation and entertainment. Machine learning,
+            a subset of AI, enables computers to learn and improve from experience without being explicitly programmed.
+            Deep learning, which uses neural networks with multiple layers, has been particularly successful in areas like
+            image recognition and natural language understanding. However, the rapid advancement of AI also raises important
+            questions about ethics, privacy, job displacement, and the future of human work. As AI continues to evolve,
+            it will be crucial to develop frameworks for responsible AI development and deployment that maximize benefits
             while minimizing potential risks and ensuring that the technology serves humanity's best interests.
             """,
             """
-            Climate change represents one of the most pressing challenges facing humanity in the 21st century. The scientific 
-            consensus is clear: human activities, particularly the burning of fossil fuels and deforestation, are driving 
-            unprecedented changes in Earth's climate system. Global temperatures have risen by approximately 1.1°C since 
-            pre-industrial times, with the rate of warming accelerating in recent decades. These changes are already having 
-            profound impacts on natural systems and human societies worldwide. Rising sea levels threaten coastal communities, 
-            extreme weather events are becoming more frequent and intense, and ecosystems are shifting in response to changing 
-            conditions. The consequences extend beyond environmental concerns to economic, social, and political stability. 
-            Addressing climate change requires immediate and sustained action across multiple sectors, including energy, 
-            transportation, agriculture, and urban planning. This includes transitioning to renewable energy sources, 
-            improving energy efficiency, implementing sustainable land use practices, and developing climate-resilient 
-            infrastructure. International cooperation is essential, as climate change is a global problem requiring global 
-            solutions. The Paris Agreement represents a significant step forward, but much more ambitious action is needed 
+            Climate change represents one of the most pressing challenges facing humanity in the 21st century. The scientific
+            consensus is clear: human activities, particularly the burning of fossil fuels and deforestation, are driving
+            unprecedented changes in Earth's climate system. Global temperatures have risen by approximately 1.1°C since
+            pre-industrial times, with the rate of warming accelerating in recent decades. These changes are already having
+            profound impacts on natural systems and human societies worldwide. Rising sea levels threaten coastal communities,
+            extreme weather events are becoming more frequent and intense, and ecosystems are shifting in response to changing
+            conditions. The consequences extend beyond environmental concerns to economic, social, and political stability.
+            Addressing climate change requires immediate and sustained action across multiple sectors, including energy,
+            transportation, agriculture, and urban planning. This includes transitioning to renewable energy sources,
+            improving energy efficiency, implementing sustainable land use practices, and developing climate-resilient
+            infrastructure. International cooperation is essential, as climate change is a global problem requiring global
+            solutions. The Paris Agreement represents a significant step forward, but much more ambitious action is needed
             to limit warming to well below 2°C and pursue efforts to limit it to 1.5°C above pre-industrial levels.
             """,
             """
-            The Internet of Things (IoT) represents a paradigm shift in how we interact with technology and the world around us. 
-            By connecting everyday objects to the internet and enabling them to collect, share, and act on data, IoT is 
-            creating a more interconnected and intelligent environment. This technology has applications across virtually every 
-            sector, from smart homes and cities to industrial automation and healthcare. In smart homes, IoT devices can 
-            control lighting, heating, security systems, and appliances, providing convenience and energy efficiency. Smart 
-            cities use IoT sensors to monitor traffic, air quality, waste management, and public services, enabling more 
-            efficient urban planning and resource allocation. In healthcare, IoT devices can monitor patient vital signs, 
-            track medication adherence, and provide remote care capabilities. Industrial IoT (IIoT) enables predictive 
-            maintenance, quality control, and supply chain optimization in manufacturing and logistics. However, the rapid 
-            proliferation of IoT devices also raises significant concerns about privacy, security, and data management. 
-            With billions of devices collecting and transmitting data, ensuring the security and privacy of this information 
-            becomes paramount. Additionally, the massive amount of data generated by IoT devices requires sophisticated 
-            analytics and storage solutions. As IoT continues to evolve, addressing these challenges while maximizing the 
+            The Internet of Things (IoT) represents a paradigm shift in how we interact with technology and the world around us.
+            By connecting everyday objects to the internet and enabling them to collect, share, and act on data, IoT is
+            creating a more interconnected and intelligent environment. This technology has applications across virtually every
+            sector, from smart homes and cities to industrial automation and healthcare. In smart homes, IoT devices can
+            control lighting, heating, security systems, and appliances, providing convenience and energy efficiency. Smart
+            cities use IoT sensors to monitor traffic, air quality, waste management, and public services, enabling more
+            efficient urban planning and resource allocation. In healthcare, IoT devices can monitor patient vital signs,
+            track medication adherence, and provide remote care capabilities. Industrial IoT (IIoT) enables predictive
+            maintenance, quality control, and supply chain optimization in manufacturing and logistics. However, the rapid
+            proliferation of IoT devices also raises significant concerns about privacy, security, and data management.
+            With billions of devices collecting and transmitting data, ensuring the security and privacy of this information
+            becomes paramount. Additionally, the massive amount of data generated by IoT devices requires sophisticated
+            analytics and storage solutions. As IoT continues to evolve, addressing these challenges while maximizing the
             benefits will be crucial for realizing the full potential of this transformative technology.
             """,
         ]
@@ -749,18 +738,14 @@ def showcase_text_summarization():
 
             print(f"   📝 Summary: {summary_text}")
             print(f"   📊 Summary length: {len(summary_text.split())} words")
-            print(
-                f"   📉 Compression ratio: {summarization_results[-1]['compression_ratio']:.1%}"
-            )
+            print(f"   📉 Compression ratio: {summarization_results[-1]['compression_ratio']:.1%}")
             print(f"   ⚡ Processing time: {processing_time:.3f}s")
 
         # Summarization Analysis
         print_section("Summarization Analysis")
 
         total_texts = len(long_texts)
-        avg_compression = (
-            sum(r["compression_ratio"] for r in summarization_results) / total_texts
-        )
+        avg_compression = sum(r["compression_ratio"] for r in summarization_results) / total_texts
         avg_processing_time = total_summarization_time / total_texts
 
         print(f"📊 Total texts summarized: {total_texts}")
@@ -768,7 +753,7 @@ def showcase_text_summarization():
         print(f"⏱️  Total processing time: {total_summarization_time:.3f}s")
         print(f"⚡ Average processing time: {avg_processing_time:.3f}s")
         print(
-            f"🚀 Words per second: {sum(r['original_length'] for r in summarization_results)/total_summarization_time:.1f}"
+            f"🚀 Words per second: {sum(r['original_length'] for r in summarization_results) / total_summarization_time:.1f}"
         )
 
         # Quality analysis
@@ -800,9 +785,10 @@ def showcase_pipeline_management():
     print_header("Pipeline Management & Orchestration")
 
     try:
-        from lingo import Pipeline, TextPreprocessor
-        import tempfile
         import os
+        import tempfile
+
+        from lingo import Pipeline, TextPreprocessor
 
         # Create a comprehensive pipeline configuration
         pipeline_config = {
@@ -886,9 +872,7 @@ def showcase_pipeline_management():
         preprocessor = TextPreprocessor(pipeline_config["preprocessing"])
 
         # Process text through multiple pipelines
-        complex_text = (
-            "Apple Inc. CEO Tim Cook announced amazing new products at WWDC 2024!"
-        )
+        complex_text = "Apple Inc. CEO Tim Cook announced amazing new products at WWDC 2024!"
 
         print(f"📝 Complex text: {complex_text}")
 
@@ -898,9 +882,7 @@ def showcase_pipeline_management():
 
         # Sentiment analysis
         sentiment_result = sentiment_pipeline(processed_text)
-        print(
-            f"🎭 Sentiment: {sentiment_result['label']} ({sentiment_result['score']:.3f})"
-        )
+        print(f"🎭 Sentiment: {sentiment_result['label']} ({sentiment_result['score']:.3f})")
 
         # NER
         ner_result = ner_pipeline(complex_text)
@@ -931,15 +913,15 @@ def showcase_pipeline_management():
         batch_time = time.time() - start_time
 
         print(f"Batch processing time: {batch_time:.3f}s")
-        print(f"Individual processing time: {batch_time/len(test_texts):.3f}s per text")
-        print(f"Throughput: {len(test_texts)/batch_time:.1f} texts/second")
+        print(f"Individual processing time: {batch_time / len(test_texts):.3f}s per text")
+        print(f"Throughput: {len(test_texts) / batch_time:.1f} texts/second")
 
         # Results summary
         positive_count = sum(1 for r in batch_results if r["label"] == "POSITIVE")
         negative_count = sum(1 for r in batch_results if r["label"] == "NEGATIVE")
         neutral_count = sum(1 for r in batch_results if r["label"] == "NEUTRAL")
 
-        print(f"\nResults summary:")
+        print("\nResults summary:")
         print(f"  😊 Positive: {positive_count}")
         print(f"  😞 Negative: {negative_count}")
         print(f"  😐 Neutral: {neutral_count}")
@@ -975,9 +957,9 @@ def main():
 
     for showcase_name, showcase_func in showcases:
         try:
-            print(f"\n{'='*80}")
+            print(f"\n{'=' * 80}")
             print(f"🚀 Running: {showcase_name}")
-            print(f"{'='*80}")
+            print(f"{'=' * 80}")
 
             success = showcase_func()
             if success:

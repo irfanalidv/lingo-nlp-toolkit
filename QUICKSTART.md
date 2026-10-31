@@ -4,7 +4,7 @@ Get up and running with Lingo NLP toolkit in minutes!
 
 ## **Prerequisites**
 
-- Python 3.9 or higher
+- Python 3.10 or higher
 - pip package manager
 - Basic knowledge of Python
 
@@ -80,10 +80,7 @@ python demo.py
 from lingo import Pipeline
 
 # Create a sentiment analysis pipeline
-nlp = Pipeline(
-    task="sentiment-analysis",
-    model="cardiffnlp/twitter-roberta-base-sentiment-latest"
-)
+nlp = Pipeline(task="sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest")
 
 # Analyze sentiment
 text = "I absolutely love this product! It's amazing!"
@@ -96,10 +93,7 @@ print(result)
 
 ```python
 # Create an NER pipeline
-ner = Pipeline(
-    task="ner",
-    model="dslim/bert-base-NER"
-)
+ner = Pipeline(task="ner", model="dslim/bert-base-NER")
 
 # Extract entities
 text = "Apple Inc. is headquartered in Cupertino, California."
@@ -144,40 +138,28 @@ lingo run sentiment-analysis \
 ### **Text Classification**
 
 ```python
-classifier = Pipeline(
-    task="text-classification",
-    model="bert-base-uncased"
-)
+classifier = Pipeline(task="text-classification", model="bert-base-uncased")
 results = classifier(["Text 1", "Text 2", "Text 3"])
 ```
 
 ### **Text Embeddings**
 
 ```python
-embeddings = Pipeline(
-    task="embedding",
-    model="sentence-transformers/all-MiniLM-L6-v2"
-)
+embeddings = Pipeline(task="embedding", model="sentence-transformers/all-MiniLM-L6-v2")
 embeds = embeddings(["Sentence 1", "Sentence 2"])
 ```
 
 ### **Question Answering**
 
 ```python
-qa = Pipeline(
-    task="question-answering",
-    model="deepset/roberta-base-squad2"
-)
+qa = Pipeline(task="question-answering", model="deepset/roberta-base-squad2")
 answer = qa(question="Who created Python?", context="Python was created by Guido van Rossum...")
 ```
 
 ### **Text Summarization**
 
 ```python
-summarizer = Pipeline(
-    task="summarization",
-    model="facebook/bart-large-cnn"
-)
+summarizer = Pipeline(task="summarization", model="facebook/bart-large-cnn")
 summary = summarizer("Long text to summarize...")
 ```
 
@@ -192,7 +174,7 @@ preprocessor = TextPreprocessor(
         "lowercase": True,
         "remove_punctuation": True,
         "remove_stopwords": True,
-        "lemmatize": True
+        "lemmatize": True,
     }
 )
 
@@ -234,7 +216,7 @@ with open("config.yaml", "r") as f:
 pipeline = Pipeline(
     task="sentiment-analysis",
     model="cardiffnlp/twitter-roberta-base-sentiment-latest",
-    config=config
+    config=config,
 )
 ```
 

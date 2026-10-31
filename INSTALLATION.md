@@ -173,7 +173,7 @@ make test
 
 ### **Minimum Requirements**
 
-- **Python**: 3.9 or higher
+- **Python**: 3.10 or higher
 - **RAM**: 4GB minimum, 8GB recommended
 - **Disk**: 5GB free space
 - **OS**: Windows 10+, macOS 10.14+, or Linux

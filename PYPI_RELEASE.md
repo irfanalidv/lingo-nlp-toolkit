@@ -8,19 +8,19 @@ This guide covers the complete process of preparing and releasing Lingo to PyPI 
 - [ ] All tests pass: `make test`
 - [ ] Code is linted: `make lint`
 - [ ] Code is formatted: `make format`
-- [ ] Type checking passes: `mypy lingo/`
+- [ ] Type checking (optional): `mypy lingo/`
 - [ ] Documentation is up to date
 - [ ] Examples are working: `make examples`
 
 ### **2. Version Management**
-- [ ] Update version in `lingo/__init__.py`
+- [ ] Update `version` in `pyproject.toml` (`lingo.__version__` reads it from package metadata)
 - [ ] Update `CHANGELOG.md` with new version
 - [ ] Ensure all changes are documented
 - [ ] Commit version bump: `git commit -m "Bump version to X.Y.Z"`
 
 ### **3. Package Configuration**
-- [ ] Verify `setup.py` configuration
-- [ ] Check `pyproject.toml` settings
+- [ ] Verify `pyproject.toml` metadata (single source of truth)
+- [ ] Check dependency lower bounds and extras
 - [ ] Validate `MANIFEST.in` includes all necessary files
 - [ ] Test package building: `make build`
 
@@ -73,7 +73,7 @@ make publish
 ### **3. Full Release Process**
 ```bash
 # Complete release workflow
-make release
+make publish
 ```
 
 ## **🔑 PyPI Authentication**
@@ -202,7 +202,7 @@ make examples
 python -m py_compile lingo/
 
 # Verify dependencies
-pip install -r requirements.txt
+pip install -e ".[dev]"
 
 # Clean and rebuild
 make clean
@@ -256,17 +256,15 @@ unzip -l dist/lingo-*.whl
 
 ### **Lingo-Specific Commands**
 ```bash
-# Complete workflow
-make release
+# Lint + tests
+make check
 
-# Test workflow
-make test-publish
+# Build and validate distributions
+make build-check
 
-# Quality checks
-make quality
-
-# Performance testing
-make benchmark
+# Publish to TestPyPI, then PyPI
+make publish-test
+make publish
 ```
 
 ### **Useful Tools**

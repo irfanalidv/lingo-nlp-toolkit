@@ -1,13 +1,15 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "lingo-nlp-toolkit"
-version = "2.3"
-description = "Advanced NLP Toolkit - Lightweight, Fast, and Transformer-Ready"
+version = "2.4.0"
+description = "Unified NLP toolkit: one Pipeline API for sentiment, NER, classification, embeddings, QA and summarization on Hugging Face models, plus spaCy/NLTK text preprocessing."
 readme = "README.md"
-# license = "MIT"  # Commented out to avoid metadata conflicts
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     {name = "Md Irfan Ali", email = "irfanali29@hotmail.com"}
 ]
@@ -15,69 +17,68 @@ maintainers = [
     {name = "Md Irfan Ali", email = "irfanali29@hotmail.com"}
 ]
 keywords = [
-    "nlp", "natural-language-processing", "transformers", "bert", 
-    "machine-learning", "ai", "text-processing", "sentiment-analysis",
-    "named-entity-recognition", "text-classification", "embeddings"
+    "nlp",
+    "natural-language-processing",
+    "transformers",
+    "huggingface",
+    "bert",
+    "text-processing",
+    "text-preprocessing",
+    "sentiment-analysis",
+    "named-entity-recognition",
+    "ner",
+    "text-classification",
+    "embeddings",
+    "sentence-transformers",
+    "question-answering",
+    "summarization",
+    "spacy",
+    "nltk",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Education",
-            # "License :: OSI Approved :: MIT License",  # Removed - superseded by license expression
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Text Processing :: Linguistic",
     "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Scientific/Engineering :: Information Analysis",
-    "Topic :: Scientific/Engineering :: Mathematics",
-    "Framework :: Jupyter",
     "Typing :: Typed",
 ]
-requires-python = ">=3.9"
 dependencies = [
-    "torch>=1.12.0",
-    "transformers>=4.20.0",
-    "tokenizers>=0.13.0",
+    "torch>=2.0",
+    "transformers>=4.30",
+    "sentence-transformers>=2.2.0",
     "spacy>=3.5.0",
     "nltk>=3.8",
     "scikit-learn>=1.1.0",
-    "numpy>=1.21.0",
-    "pandas>=1.5.0",
-    "scipy>=1.9.0",
+    "numpy>=1.23",
     "tqdm>=4.64.0",
     "pyyaml>=6.0",
     "requests>=2.28.0",
-    "beautifulsoup4>=4.11.0",
-    "lxml>=4.9.0",
-    "fastapi>=0.95.0",
-    "uvicorn>=0.20.0",
-    "pydantic>=1.10.0",
-    "sentence-transformers>=2.2.0",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "pytest-mock>=3.10.0",
-    "black>=22.0.0",
-    "isort>=5.10.0",
-    "flake8>=5.0.0",
-    "mypy>=1.0.0",
-    "pre-commit>=2.20.0",
-    "tox>=4.0.0",
-    "sphinx>=5.0.0",
-    "sphinx-rtd-theme>=1.0.0",
-    "myst-parser>=0.18.0",
+# Serving a pipeline behind an HTTP API (see README "REST API Template")
+api = [
+    "fastapi>=0.95.0",
+    "uvicorn>=0.20.0",
+]
+# Dependencies used by the example scripts in examples/
+examples = [
+    "pandas>=1.5.0",
 ]
 full = [
-    "sentence-transformers>=2.2.0",
+    "fastapi>=0.95.0",
+    "uvicorn>=0.20.0",
+    "pandas>=1.5.0",
     "pdfplumber>=0.7.0",
     "python-docx>=0.8.11",
     "openpyxl>=3.0.10",
@@ -85,144 +86,69 @@ full = [
     "seaborn>=0.11.0",
     "plotly>=5.10.0",
     "umap-learn>=0.5.3",
-    "hdbscan>=0.8.29",
-    "gensim>=4.3.0",
     "wordcloud>=1.9.0",
     "textstat>=0.7.3",
-    "language-tool-python>=2.7.1",
-    "spacy[transformers]>=3.5.0",
 ]
 gpu = [
-    "torch>=1.12.0",
-    "torchvision>=0.13.0",
-    "torchaudio>=0.12.0",
+    "torch>=2.0",
+    "torchvision>=0.15",
+    "torchaudio>=2.0",
 ]
-docs = [
-    "sphinx>=5.0.0",
-    "sphinx-rtd-theme>=1.0.0",
-    "myst-parser>=0.18.0",
-    "sphinx-autodoc-typehints>=1.19.0",
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.6.0",
+    "build>=1.0.0",
+    "twine>=5.0.0",
 ]
 test = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
-    "pytest-mock>=3.10.0",
-    "pytest-xdist>=3.0.0",
-    "coverage>=6.0.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/irfanalidv/lingo-nlp-toolkit"
-Documentation = "https://github.com/irfanalidv/lingo-nlp-toolkit"
-Repository = "https://github.com/irfanalidv/lingo-nlp-toolkit.git"
-"Bug Tracker" = "https://github.com/irfanalidv/lingo-nlp-toolkit/issues"
-"Source Code" = "https://github.com/irfanalidv/lingo-nlp-toolkit"
+Documentation = "https://github.com/irfanalidv/lingo-nlp-toolkit#readme"
+Repository = "https://github.com/irfanalidv/lingo-nlp-toolkit"
+Issues = "https://github.com/irfanalidv/lingo-nlp-toolkit/issues"
 Changelog = "https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CHANGELOG.md"
-"Download" = "https://pypi.org/project/lingo-nlp-toolkit/#files"
 
 [project.scripts]
 lingo = "lingo.cli:main"
 
 [tool.setuptools]
-packages = ["lingo"]
+packages = ["lingo", "lingo.configs"]
 include-package-data = true
 zip-safe = false
 
 [tool.setuptools.package-data]
-lingo = [
-    "configs/*.yaml",
-    "configs/*.yml", 
-    "models/*.json",
-    "data/*.txt",
-    "*.pyi",
-    "py.typed"
-]
+lingo = ["py.typed"]
+"lingo.configs" = ["*.yaml", "*.yml"]
 
-# Version management removed to avoid conflicts
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+extend-exclude = ["build", "dist", "*.md"]
 
-[tool.black]
-line-length = 88
-target-version = ['py39', 'py310', 'py311', 'py312']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501", "B008"]
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-line_length = 88
-known_first_party = ["lingo"]
+[tool.ruff.lint.per-file-ignores]
+"examples/*" = ["B", "UP", "E722", "F841"]
+"demo.py" = ["B", "UP", "E722", "F841"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["lingo"]
 
 [tool.pytest.ini_options]
-minversion = "6.0"
-addopts = "-ra -q --strict-markers --strict-config"
+minversion = "7.0"
+addopts = "-ra -q --strict-markers"
 testpaths = ["tests"]
-python_files = ["test_*.py", "*_test.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
 
 [tool.coverage.run]
 source = ["lingo"]
-omit = [
-    "*/tests/*",
-    "*/test_*",
-    "*/__pycache__/*",
-    "*/venv/*",
-    "*/env/*",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if __name__ == .__main__.:",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
-]
 
 [tool.mypy]
-python_version = "3.9"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-warn_unreachable = true
-strict_equality = true
-
-[[tool.mypy.overrides]]
-module = [
-    "torch.*",
-    "transformers.*",
-    "spacy.*",
-    "nltk.*",
-    "sklearn.*",
-    "numpy.*",
-    "pandas.*",
-    "scipy.*",
-    "fastapi.*",
-    "uvicorn.*",
-    "pydantic.*",
-]
+python_version = "3.10"
 ignore_missing_imports = true

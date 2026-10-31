@@ -6,8 +6,6 @@ Showcasing comprehensive NLP capabilities and real-world use cases.
 
 import json
 import time
-from pathlib import Path
-from typing import List, Dict, Any
 
 
 def print_header(title: str):
@@ -73,9 +71,7 @@ def demo_text_preprocessing():
             print(f"   📊 Sentences: {results['sentence_count']}")
 
             if results.get("words_no_stopwords"):
-                print(
-                    f"   🚫 No stopwords: {len(results['words_no_stopwords'])} tokens"
-                )
+                print(f"   🚫 No stopwords: {len(results['words_no_stopwords'])} tokens")
 
             if results.get("lemmatized"):
                 print(f"   🔍 Lemmatized: {results['lemmatized'][:5]}...")
@@ -145,9 +141,7 @@ def demo_sentiment_analysis():
         batch_time = time.time() - start_time
 
         print(f"Batch processing time: {batch_time:.3f}s")
-        print(
-            f"Individual processing time: {batch_time/len(sentiment_texts):.3f}s per text"
-        )
+        print(f"Individual processing time: {batch_time / len(sentiment_texts):.3f}s per text")
 
         return True
 
@@ -198,9 +192,7 @@ def demo_named_entity_recognition():
                 )
                 if entity_type not in entity_types:
                     entity_types[entity_type] = []
-                entity_types[entity_type].append(
-                    entity.get("word", entity.get("text", "UNKNOWN"))
-                )
+                entity_types[entity_type].append(entity.get("word", entity.get("text", "UNKNOWN")))
 
             for entity_type, words in entity_types.items():
                 print(f"   📌 {entity_type}: {', '.join(set(words))}")
@@ -259,8 +251,9 @@ def demo_embeddings_and_similarity():
     print_header("Advanced Embeddings & Similarity")
 
     try:
-        from lingo import Pipeline
         import numpy as np
+
+        from lingo import Pipeline
 
         # Sample texts for similarity analysis
         similarity_texts = [
@@ -282,7 +275,7 @@ def demo_embeddings_and_similarity():
         # Generate embeddings
         embeddings = []
         for i, text in enumerate(similarity_texts):
-            print(f"📝 Text {i+1}: {text}")
+            print(f"📝 Text {i + 1}: {text}")
 
             start_time = time.time()
             embedding = embedding_pipeline(text)
@@ -307,11 +300,11 @@ def demo_embeddings_and_similarity():
         print("Similarity Matrix (higher values = more similar):")
         print("      ", end="")
         for i in range(len(similarity_texts)):
-            print(f"T{i+1:2d} ", end="")
+            print(f"T{i + 1:2d} ", end="")
         print()
 
         for i in range(len(similarity_texts)):
-            print(f"T{i+1:2d} ", end="")
+            print(f"T{i + 1:2d} ", end="")
             for j in range(len(similarity_texts)):
                 print(f"{similarity_matrix[i][j]:.2f} ", end="")
             print()
@@ -328,8 +321,8 @@ def demo_embeddings_and_similarity():
 
         for i, j, similarity in most_similar[:3]:
             print(f"📊 Similarity {similarity:.3f}:")
-            print(f"   Text {i+1}: {similarity_texts[i]}")
-            print(f"   Text {j+1}: {similarity_texts[j]}")
+            print(f"   Text {i + 1}: {similarity_texts[i]}")
+            print(f"   Text {j + 1}: {similarity_texts[j]}")
 
         return True
 
@@ -347,10 +340,10 @@ def demo_question_answering():
 
         # Context and questions
         context = """
-        The Python programming language was created by Guido van Rossum and was released in 1991. 
-        Python is known for its simplicity and readability, making it an excellent choice for beginners. 
-        It supports multiple programming paradigms including procedural, object-oriented, and functional programming. 
-        Python has a large standard library and is widely used in web development, data science, artificial intelligence, 
+        The Python programming language was created by Guido van Rossum and was released in 1991.
+        Python is known for its simplicity and readability, making it an excellent choice for beginners.
+        It supports multiple programming paradigms including procedural, object-oriented, and functional programming.
+        Python has a large standard library and is widely used in web development, data science, artificial intelligence,
         and scientific computing. The language emphasizes code readability with its notable use of significant whitespace.
         """
 
@@ -363,9 +356,7 @@ def demo_question_answering():
         ]
 
         # Create QA pipeline
-        qa_pipeline = Pipeline(
-            task="question-answering", model="deepset/roberta-base-squad2"
-        )
+        qa_pipeline = Pipeline(task="question-answering", model="deepset/roberta-base-squad2")
 
         print_section("Context")
         print(context.strip())
@@ -401,16 +392,16 @@ def demo_text_summarization():
 
         # Long text for summarization
         long_text = """
-        Artificial Intelligence (AI) has emerged as one of the most transformative technologies of the 21st century. 
-        It encompasses a wide range of capabilities including machine learning, natural language processing, computer vision, 
-        and robotics. AI systems can now perform tasks that were once thought to be exclusively human, such as recognizing 
-        speech, translating languages, making decisions, and solving complex problems. The technology has applications 
-        across virtually every industry, from healthcare and finance to transportation and entertainment. Machine learning, 
-        a subset of AI, enables computers to learn and improve from experience without being explicitly programmed. 
-        Deep learning, which uses neural networks with multiple layers, has been particularly successful in areas like 
-        image recognition and natural language understanding. However, the rapid advancement of AI also raises important 
-        questions about ethics, privacy, job displacement, and the future of human work. As AI continues to evolve, 
-        it will be crucial to develop frameworks for responsible AI development and deployment that maximize benefits 
+        Artificial Intelligence (AI) has emerged as one of the most transformative technologies of the 21st century.
+        It encompasses a wide range of capabilities including machine learning, natural language processing, computer vision,
+        and robotics. AI systems can now perform tasks that were once thought to be exclusively human, such as recognizing
+        speech, translating languages, making decisions, and solving complex problems. The technology has applications
+        across virtually every industry, from healthcare and finance to transportation and entertainment. Machine learning,
+        a subset of AI, enables computers to learn and improve from experience without being explicitly programmed.
+        Deep learning, which uses neural networks with multiple layers, has been particularly successful in areas like
+        image recognition and natural language understanding. However, the rapid advancement of AI also raises important
+        questions about ethics, privacy, job displacement, and the future of human work. As AI continues to evolve,
+        it will be crucial to develop frameworks for responsible AI development and deployment that maximize benefits
         while minimizing potential risks and ensuring that the technology serves humanity's best interests.
         """
 
@@ -431,7 +422,7 @@ def demo_text_summarization():
         print(f"📝 Summary: {summary['summary_text']}")
         print(f"📊 Summary length: {len(summary['summary_text'].split())} words")
         print(
-            f"📉 Compression ratio: {len(summary['summary_text'].split())/len(long_text.split())*100:.1f}%"
+            f"📉 Compression ratio: {len(summary['summary_text'].split()) / len(long_text.split()) * 100:.1f}%"
         )
         print(f"⚡ Processing time: {processing_time:.3f}s")
 
@@ -447,9 +438,10 @@ def demo_pipeline_management():
     print_header("Advanced Pipeline Management")
 
     try:
-        from lingo import Pipeline
-        import tempfile
         import os
+        import tempfile
+
+        from lingo import Pipeline
 
         # Create a custom pipeline configuration
         pipeline_config = {
@@ -523,9 +515,10 @@ def demo_performance_benchmarks():
     print_header("Performance Benchmarks")
 
     try:
-        from lingo import Pipeline
-        import time
         import statistics
+        import time
+
+        from lingo import Pipeline
 
         # Test texts of varying lengths
         test_texts = [
@@ -545,7 +538,7 @@ def demo_performance_benchmarks():
 
         results = {}
         for i, text in enumerate(test_texts):
-            print(f"\n📝 Text {i+1} ({len(text.split())} words): {text[:50]}...")
+            print(f"\n📝 Text {i + 1} ({len(text.split())} words): {text[:50]}...")
 
             # Warm-up run
             pipeline(text)
@@ -587,7 +580,7 @@ def demo_performance_benchmarks():
 
         for i, result in results.items():
             efficiency = result["words_per_second"] / overall_wps
-            print(f"Text {i+1}: {efficiency:.2f}x efficiency")
+            print(f"Text {i + 1}: {efficiency:.2f}x efficiency")
 
         return True
 

@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "lingo-nlp-toolkit"
+abstract: "Unified NLP toolkit: one Pipeline API for sentiment, NER, classification, embeddings, QA and summarization on Hugging Face models"
+authors:
+  - family-names: Ali
+    given-names: Irfan
+version: "2.4.0"
+date-released: "2026-10-31"
+license: MIT
+repository-code: "https://github.com/irfanalidv/lingo-nlp-toolkit"
+url: "https://pypi.org/project/lingo-nlp-toolkit/"

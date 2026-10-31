@@ -4,9 +4,8 @@ Basic usage examples for Lingo NLP toolkit.
 This script demonstrates the core functionality.
 """
 
-import json
 from lingo import Pipeline, TextPreprocessor
-from lingo.utils import get_available_models, evaluate_classification
+from lingo.utils import get_available_models
 
 
 def main():
@@ -36,9 +35,7 @@ def main():
 
     print("\nResults:")
     for text, result in zip(texts, results):
-        print(
-            f"  • {text[:50]}... → {result['label']} (confidence: {result['score']:.3f})"
-        )
+        print(f"  • {text[:50]}... → {result['label']} (confidence: {result['score']:.3f})")
 
     # Expected output:
     # Results:
@@ -87,9 +84,7 @@ def main():
     print("4. TEXT EMBEDDINGS")
     print("=" * 50)
 
-    embedding_pipeline = Pipeline(
-        task="embedding", model="sentence-transformers/all-MiniLM-L6-v2"
-    )
+    embedding_pipeline = Pipeline(task="embedding", model="sentence-transformers/all-MiniLM-L6-v2")
 
     text1 = "The cat is on the mat."
     text2 = "A cat is sitting on the mat."
@@ -103,7 +98,6 @@ def main():
     embeddings = embedding_pipeline([text1, text2, text3])
 
     # Calculate similarities
-    from lingo.models import EmbeddingModel
 
     embedding_model = embedding_pipeline.model
 
@@ -122,13 +116,11 @@ def main():
     print("5. QUESTION ANSWERING")
     print("=" * 50)
 
-    qa_pipeline = Pipeline(
-        task="question-answering", model="deepset/roberta-base-squad2"
-    )
+    qa_pipeline = Pipeline(task="question-answering", model="deepset/roberta-base-squad2")
 
     context = """
-    The Python programming language was created by Guido van Rossum and was released in 1991. 
-    Python is known for its simplicity and readability. It has become one of the most popular 
+    The Python programming language was created by Guido van Rossum and was released in 1991.
+    Python is known for its simplicity and readability. It has become one of the most popular
     programming languages for data science, machine learning, and web development.
     """
 
@@ -151,20 +143,18 @@ def main():
     print("6. TEXT SUMMARIZATION")
     print("=" * 50)
 
-    summarization_pipeline = Pipeline(
-        task="summarization", model="facebook/bart-large-cnn"
-    )
+    summarization_pipeline = Pipeline(task="summarization", model="facebook/bart-large-cnn")
 
     long_text = """
-    Artificial Intelligence (AI) has emerged as one of the most transformative technologies 
-    of the 21st century. From virtual assistants like Siri and Alexa to self-driving cars 
-    and medical diagnosis systems, AI is revolutionizing how we live and work. Machine 
-    learning, a subset of AI, enables computers to learn from data without being explicitly 
-    programmed. Deep learning, which uses neural networks with multiple layers, has achieved 
-    remarkable breakthroughs in image recognition, natural language processing, and game playing. 
-    Companies across industries are investing heavily in AI to gain competitive advantages, 
-    while researchers continue to push the boundaries of what's possible. However, the rapid 
-    advancement of AI also raises important questions about ethics, privacy, and the future 
+    Artificial Intelligence (AI) has emerged as one of the most transformative technologies
+    of the 21st century. From virtual assistants like Siri and Alexa to self-driving cars
+    and medical diagnosis systems, AI is revolutionizing how we live and work. Machine
+    learning, a subset of AI, enables computers to learn from data without being explicitly
+    programmed. Deep learning, which uses neural networks with multiple layers, has achieved
+    remarkable breakthroughs in image recognition, natural language processing, and game playing.
+    Companies across industries are investing heavily in AI to gain competitive advantages,
+    while researchers continue to push the boundaries of what's possible. However, the rapid
+    advancement of AI also raises important questions about ethics, privacy, and the future
     of human work.
     """
 

@@ -32,7 +32,7 @@ def main():
     print(f"Cleaned: {results['cleaned']}")
     print(f"Words: {len(results['words'])}")
     print(f"Lemmatized: {results['lemmatized'][:5]}")
-    
+
     # Expected output:
     # Original: I'm gonna love this product! It's AWESOME!!! 😍 #amazing
     # Cleaned: i am gonna love this product! it is awesome!!! 😍 #amazing
@@ -57,7 +57,7 @@ def main():
     for text in texts:
         result = sentiment_pipeline(text)
         print(f"{text}: {result['label']} ({result['score']:.3f})")
-    
+
     # Expected output:
     # I love this product! It's amazing!: positive (0.987)
     # This is terrible quality.: negative (0.937)
@@ -75,20 +75,18 @@ def main():
     print(f"Text: {ner_text}")
     for entity in entities:
         print(f"  {entity['entity_group']}: {entity['word']}")
-    
+
     # Expected output:
     # Text: Apple Inc. CEO Tim Cook announced new products in San Francisco.
     #   B-LOC: cup
     #   B-LOC: ##ert
     #   I-LOC: ##ino
 
-        # Embeddings showcase
+    # Embeddings showcase
     print("\n🔢 Text Embeddings")
     print("-" * 30)
 
-    embedding_pipeline = Pipeline(
-        task="embedding", model="sentence-transformers/all-MiniLM-L6-v2"
-    )
+    embedding_pipeline = Pipeline(task="embedding", model="sentence-transformers/all-MiniLM-L6-v2")
 
     embedding_text = "Machine learning is transforming industries."
     embedding = embedding_pipeline(embedding_text)
@@ -102,7 +100,7 @@ def main():
             print(f"Embedding shape: {embedding.shape}")
         elif hasattr(embedding, "__len__"):
             print(f"Embedding length: {len(embedding)}")
-    
+
     # Expected output:
     # Text: Machine learning is transforming industries.
     # Embedding dimensions: 384

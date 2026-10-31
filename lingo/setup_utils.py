@@ -3,15 +3,24 @@ Setup utilities for Lingo NLP toolkit.
 Automatically downloads and installs required NLP data.
 """
 
-import os
-import sys
 import logging
+import subprocess
+import sys
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 
-def download_spacy_model(model_name: str = "en_core_web_sm"):
+# NLTK resources used by lingo, mapped to their location inside nltk_data
+NLTK_RESOURCES = {
+    "punkt": "tokenizers/punkt",
+    "punkt_tab": "tokenizers/punkt_tab",
+    "stopwords": "corpora/stopwords",
+    "wordnet": "corpora/wordnet",
+}
+
+
+def download_spacy_model(model_name: str = "en_core_web_sm") -> bool:
     """Download spaCy model if not already present."""
     try:
         import spacy
@@ -26,7 +35,10 @@ def download_spacy_model(model_name: str = "en_core_web_sm"):
 
         # Download the model
         logger.info(f"Downloading spaCy model: {model_name}")
-        os.system(f"python -m spacy download {model_name}")
+        subprocess.run(
+            [sys.executable, "-m", "spacy", "download", model_name],
+            check=False,
+        )
 
         # Verify download
         try:
@@ -42,16 +54,14 @@ def download_spacy_model(model_name: str = "en_core_web_sm"):
         return False
 
 
-def download_nltk_data():
+def download_nltk_data() -> bool:
     """Download required NLTK data."""
     try:
         import nltk
 
-        required_packages = ["punkt", "stopwords", "wordnet", "punkt_tab"]
-
-        for package in required_packages:
+        for package, resource_path in NLTK_RESOURCES.items():
             try:
-                nltk.data.find(f"tokenizers/{package}")
+                nltk.data.find(resource_path)
                 logger.info(f"NLTK package '{package}' is already available")
             except LookupError:
                 logger.info(f"Downloading NLTK package: {package}")
@@ -65,10 +75,10 @@ def download_nltk_data():
         return False
 
 
-def download_transformers_data():
+def download_transformers_data() -> bool:
     """Download and cache common transformer models."""
     try:
-        from transformers import AutoTokenizer, AutoModel
+        from transformers import AutoModel, AutoTokenizer
 
         # List of essential models to pre-download
         essential_models = [
@@ -83,10 +93,8 @@ def download_transformers_data():
         for model_name in essential_models:
             try:
                 logger.info(f"Downloading model: {model_name}")
-                # Download tokenizer
-                tokenizer = AutoTokenizer.from_pretrained(model_name)
-                # Download model
-                model = AutoModel.from_pretrained(model_name)
+                AutoTokenizer.from_pretrained(model_name)
+                AutoModel.from_pretrained(model_name)
                 logger.info(f"Successfully downloaded: {model_name}")
             except Exception as e:
                 logger.warning(f"Failed to download {model_name}: {e}")
@@ -98,7 +106,7 @@ def download_transformers_data():
         return False
 
 
-def setup_lingo_environment():
+def setup_lingo_environment() -> bool:
     """Set up the complete Lingo environment."""
     logger.info("Setting up Lingo NLP environment...")
 
@@ -117,17 +125,17 @@ def setup_lingo_environment():
 
     # Create a completion marker
     completion_file = cache_dir / "setup_complete.txt"
-    with open(completion_file, "w") as f:
+    with open(completion_file, "w", encoding="utf-8") as f:
         f.write("Lingo setup completed successfully!\n")
         f.write(f"spaCy: {'✓' if spacy_success else '✗'}\n")
         f.write(f"NLTK: {'✓' if nltk_success else '✗'}\n")
         f.write(f"Transformers: {'✓' if transformers_success else '✗'}\n")
 
     logger.info("Lingo environment setup completed!")
-    return True
+    return spacy_success and nltk_success and transformers_success
 
 
-def check_lingo_environment():
+def check_lingo_environment() -> bool:
     """Check if Lingo environment is properly set up."""
     cache_dir = Path.home() / ".lingo_cache"
     completion_file = cache_dir / "setup_complete.txt"
