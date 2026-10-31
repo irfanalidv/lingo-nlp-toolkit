@@ -4,7 +4,6 @@ Provides helper functions for model management, evaluation, and common operation
 """
 
 import logging
-import os
 import re
 from pathlib import Path
 from typing import Any
@@ -43,12 +42,11 @@ def load_model(path: str | Path) -> Any:
         return Pipeline.load(path)
 
     # Check if it's a standalone model
-    elif (path / "model_config.json").exists():
+    if (path / "model_config.json").exists():
         # This would need to be implemented based on the model type
         raise NotImplementedError("Standalone model loading not yet implemented")
 
-    else:
-        raise ValueError(f"Invalid model path: {path}")
+    raise ValueError(f"Invalid model path: {path}")
 
 
 def save_model(model: Any, path: str | Path):
@@ -126,18 +124,16 @@ def download_model(model_name: str, cache_dir: str | None = None) -> str:
         # Download model (this will cache it)
         AutoModel.from_pretrained(model_name, cache_dir=cache_dir)
 
-        logger.info(f"Successfully downloaded model: {model_name}")
+        logger.info("Successfully downloaded model: %s", model_name)
 
         # Return the cache path
+        folder = "models--" + model_name.replace("/", "--")
         if cache_dir:
-            return os.path.join(cache_dir, "models--" + model_name.replace("/", "--"))
-        else:
-            return os.path.expanduser(
-                "~/.cache/huggingface/hub/models--" + model_name.replace("/", "--")
-            )
+            return str(Path(cache_dir) / folder)
+        return str(Path("~/.cache/huggingface/hub").expanduser() / folder)
 
     except Exception as e:
-        logger.error(f"Error downloading model {model_name}: {e}")
+        logger.error("Error downloading model %s: %s", model_name, e)
         raise
 
 
@@ -272,6 +268,10 @@ def chunk_text(
     Returns:
         List of text chunks
     """
+    if max_length < 1:
+        raise ValueError("max_length must be >= 1")
+    if overlap < 0:
+        raise ValueError("overlap must be >= 0")
     if len(text) <= max_length:
         return [text]
 
@@ -288,10 +288,10 @@ def chunk_text(
                 end = break_point + 1
 
         chunks.append(text[start:end].strip())
-        start = end - overlap
-
-        if start >= len(text):
+        if end >= len(text):
             break
+        # Always move forward, even when a separator shortened the chunk below `overlap`
+        start = max(end - overlap, start + 1)
 
     return chunks
 
@@ -339,16 +339,19 @@ def get_text_statistics(text: str) -> dict[str, Any]:
     # Count characters (excluding spaces)
     char_count = len(text.replace(" ", ""))
 
-    # Count syllables (approximate)
-    syllable_count = sum(len(re.findall(r"[aeiouy]+", word.lower())) for word in words)
+    # Count syllables (approximate: vowel groups, at least one per word)
+    syllable_count = sum(
+        max(1, len(re.findall(r"[aeiouy]+", word.lower()))) for word in words if word
+    )
 
     # Calculate readability scores
     avg_sentence_length = len(words) / len(sentences) if sentences else 0
     avg_word_length = sum(len(word) for word in words) / len(words) if words else 0
+    avg_syllables_per_word = syllable_count / len(words) if words else 0
 
-    # Flesch Reading Ease (simplified)
-    flesch_score = 206.835 - (1.015 * avg_sentence_length) - (84.6 * avg_word_length)
-    flesch_score = max(0, min(100, flesch_score))
+    # Flesch Reading Ease (Flesch, 1948), clamped to 0-100
+    flesch_score = 206.835 - (1.015 * avg_sentence_length) - (84.6 * avg_syllables_per_word)
+    flesch_score = max(0.0, min(100.0, flesch_score)) if words else 0.0
 
     return {
         "characters": len(text),
@@ -367,21 +370,22 @@ def _get_reading_level(flesch_score: float) -> str:
     """Get reading level based on Flesch score."""
     if flesch_score >= 90:
         return "Very Easy"
-    elif flesch_score >= 80:
+    if flesch_score >= 80:
         return "Easy"
-    elif flesch_score >= 70:
+    if flesch_score >= 70:
         return "Fairly Easy"
-    elif flesch_score >= 60:
+    if flesch_score >= 60:
         return "Standard"
-    elif flesch_score >= 50:
+    if flesch_score >= 50:
         return "Fairly Difficult"
-    elif flesch_score >= 30:
+    if flesch_score >= 30:
         return "Difficult"
-    else:
-        return "Very Difficult"
+    return "Very Difficult"
 
 
-def download_file(url: str, filepath: str, show_progress: bool = True) -> str:
+def download_file(
+    url: str, filepath: str | Path, show_progress: bool = True, timeout: float = 30.0
+) -> str:
     """
     Download a file from URL with progress bar.
 
@@ -389,23 +393,24 @@ def download_file(url: str, filepath: str, show_progress: bool = True) -> str:
         url: URL to download from
         filepath: Local path to save the file
         show_progress: Whether to show download progress
+        timeout: Seconds to wait for the server to connect or send data
 
     Returns:
         Path to the downloaded file
     """
-    response = requests.get(url, stream=True)
-    response.raise_for_status()
+    filepath = Path(filepath)
+    with requests.get(url, stream=True, timeout=timeout) as response:
+        response.raise_for_status()
+        total_size = int(response.headers.get("content-length", 0))
 
-    total_size = int(response.headers.get("content-length", 0))
-
-    with open(filepath, "wb") as f:
-        if show_progress and total_size > 0:
-            with tqdm(total=total_size, unit="B", unit_scale=True) as pbar:
+        with filepath.open("wb") as f:
+            if show_progress and total_size > 0:
+                with tqdm(total=total_size, unit="B", unit_scale=True) as pbar:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                        pbar.update(len(chunk))
+            else:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-                    pbar.update(len(chunk))
-        else:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
 
-    return filepath
+    return str(filepath)
