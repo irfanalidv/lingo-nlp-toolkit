@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lingo-nlp-toolkit"
-version = "2.4.0"
+version = "2.5.0"
 description = "Unified NLP toolkit: one Pipeline API for sentiment, NER, classification, embeddings, QA and summarization on Hugging Face models, plus spaCy/NLTK text preprocessing."
 readme = "README.md"
 requires-python = ">=3.10"

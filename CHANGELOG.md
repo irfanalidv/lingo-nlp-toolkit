@@ -5,6 +5,38 @@ All notable changes to the Lingo NLP Toolkit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-10-31
+
+### Added
+
+- `lingo.exceptions` with `LingoError`, `UnsupportedTaskError` and `InvalidInputError`
+  (both also `ValueError`, as raised before), exported from `lingo`.
+- `Pipeline.load(path, device=None)` can override the saved device.
+- `download_file(..., timeout=30.0)`.
+- Four runnable use-case examples replace the previous simulated scripts.
+- CI runs mypy and enforces 90% coverage; CodeQL workflow; pre-commit config.
+
+### Fixed
+
+- `chunk_text` could loop forever when a separator shortened a chunk below `overlap`.
+- `get_text_statistics` computed Flesch Reading Ease from characters per word instead of
+  syllables per word, so nearly every text scored 0.
+- With `expand_contractions` and `remove_punctuation` both enabled, contractions were never
+  expanded (punctuation removal ran first). Typographic apostrophes are handled, and
+  `won't`/`can't`/`shan't` expand correctly.
+- `TextPreprocessor(remove_stopwords=True)` crashed with `OSError` for languages without an NLTK
+  stopword list.
+- `download_file` had no timeout and leaked the streamed response.
+- `EmbeddingModel.similarity` returned NaN for zero vectors.
+- JSON config files are read and written as UTF-8 on every platform.
+- CLI errors are printed to stderr.
+
+### Changed
+
+- Ruff rule set broadened (`SIM`, `C4`, `RUF`, `PTH`, `RET`, `PIE`); stricter mypy settings.
+- Removed QUICKSTART.md, INSTALLATION.md, CAPABILITIES.md, PYPI_RELEASE.md and demo.py; the README
+  is the single user guide.
+
 ## [2.4.0] - 2026-10-31
 
 ### Fixed

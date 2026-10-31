@@ -5,7 +5,7 @@ abstract: "Unified NLP toolkit: one Pipeline API for sentiment, NER, classificat
 authors:
   - family-names: Ali
     given-names: Irfan
-version: "2.4.0"
+version: "2.5.0"
 date-released: "2026-10-31"
 license: MIT
 repository-code: "https://github.com/irfanalidv/lingo-nlp-toolkit"
