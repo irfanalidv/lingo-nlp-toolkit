@@ -205,6 +205,15 @@ def test_expand_contractions_handles_irregular_forms() -> None:
     assert pre.expand_contractions("They're here") == "They are here"
 
 
+def test_contractions_are_expanded_before_punctuation_is_removed() -> None:
+    pre = TextPreprocessor(
+        config={"use_spacy": False, "expand_contractions": True, "remove_punctuation": True}
+    )
+    # Used to give "i cant go" because the apostrophe was stripped first
+    assert pre("I can't go!") == "i cannot go"
+    assert pre("It\u2019s fine") == "it is fine"
+
+
 def test_subword_tokenization_warns(caplog: pytest.LogCaptureFixture) -> None:
     TextPreprocessor(config={"use_spacy": False, "use_subword_tokenization": True})
     assert "not implemented" in caplog.text

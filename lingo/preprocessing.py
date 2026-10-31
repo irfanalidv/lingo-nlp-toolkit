@@ -157,6 +157,11 @@ class TextPreprocessor:
         if self.config.get("lowercase", True):
             text = text.lower()
 
+        # Contractions must be expanded before punctuation is stripped, otherwise the
+        # apostrophes are gone and "can't" can no longer be recognised.
+        if self.config.get("expand_contractions", False):
+            text = self.expand_contractions(text)
+
         if self.config.get("remove_punctuation", False):
             text = self.remove_punctuation(text)
 
@@ -165,9 +170,6 @@ class TextPreprocessor:
 
         if self.config.get("remove_special_chars", False):
             text = self.remove_special_chars(text)
-
-        if self.config.get("expand_contractions", False):
-            text = self.expand_contractions(text)
 
         if self.config.get("correct_spelling", False):
             text = self.correct_spelling(text)
@@ -198,6 +200,7 @@ class TextPreprocessor:
 
     def expand_contractions(self, text: str) -> str:
         """Expand common contractions."""
+        text = text.replace("\u2019", "'")  # typographic apostrophe
         # Irregular forms first, otherwise "won't" would become "wo not"
         irregular = {"won't": "will not", "can't": "cannot", "shan't": "shall not"}
         for contraction, expansion in irregular.items():
