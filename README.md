@@ -1,595 +1,284 @@
 <div align="center">
 
-# Lingo: Advanced NLP Toolkit
+# Lingo NLP Toolkit
 
 **One `Pipeline` API for sentiment, NER, classification, embeddings, question answering and summarization on Hugging Face models, plus spaCy/NLTK text preprocessing.**
 
 [![PyPI version](https://img.shields.io/pypi/v/lingo-nlp-toolkit.svg)](https://pypi.org/project/lingo-nlp-toolkit/)
 [![Python versions](https://img.shields.io/pypi/pyversions/lingo-nlp-toolkit.svg)](https://pypi.org/project/lingo-nlp-toolkit/)
+[![Downloads](https://static.pepy.tech/badge/lingo-nlp-toolkit)](https://pepy.tech/projects/lingo-nlp-toolkit)
 [![Tests](https://github.com/irfanalidv/lingo-nlp-toolkit/actions/workflows/tests.yml/badge.svg)](https://github.com/irfanalidv/lingo-nlp-toolkit/actions/workflows/tests.yml)
-[![PyPI Downloads](https://static.pepy.tech/badge/lingo-nlp-toolkit)](https://pepy.tech/projects/lingo-nlp-toolkit)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/LICENSE)
+[![CodeQL](https://github.com/irfanalidv/lingo-nlp-toolkit/actions/workflows/codeql.yml/badge.svg)](https://github.com/irfanalidv/lingo-nlp-toolkit/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/pypi/l/lingo-nlp-toolkit.svg)](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/LICENSE)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![typed: mypy](https://img.shields.io/badge/typed-mypy-blue.svg)](https://mypy-lang.org/)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CONTRIBUTING.md)
 
 </div>
 
-## **Overview**
+## Why Lingo
 
-Lingo is a modern, high-performance **Natural Language Processing (NLP) toolkit** designed for researchers, data scientists, and developers building intelligent language-powered applications. It combines **ease of use**, **speed**, and **state-of-the-art transformer capabilities**, offering an end-to-end pipeline — from text preprocessing to advanced contextual understanding.
+Each NLP task in the Hugging Face ecosystem comes with its own loading code, input format and
+return shape, and transformers 5 removed the ready-made question-answering and summarization
+pipelines. Lingo puts six common tasks behind one `Pipeline(task, model)` call that accepts a
+string or a list, returns one result per input, picks the device for you, and keeps working on
+transformers 4.x and 5.x. Classic preprocessing (normalisation, stopwords, lemmatisation,
+readability) lives in the same package, and every pipeline can be saved, reloaded offline, or run
+from the `lingo` CLI.
 
-Lingo bridges the gap between traditional NLP techniques (spaCy, NLTK) and transformer models from the Hugging Face Hub (BERT, RoBERTa, BART, sentence-transformers, ...) behind a single, consistent API.
+## Features
 
-### **Why Lingo?**
+| | |
+| --- | --- |
+| **Six tasks, one API** | `text-classification`, `ner`, `sentiment-analysis`, `embedding`, `question-answering`, `summarization`. |
+| **Any Hub model** | Pass a model id or local path; extra keyword arguments go to the Hugging Face pipeline (for example `aggregation_strategy="first"` for NER). |
+| **Predictable shapes** | A string in gives one result out; a list in gives a list out; `batch_predict` for large inputs. |
+| **transformers 4 and 5** | QA (sliding windows over long contexts, character offsets) and summarization are implemented on the model classes directly. |
+| **Device selection** | `device="auto"` picks CUDA, Apple MPS or CPU. |
+| **Preprocessing** | Unicode/whitespace normalisation, contractions, slang, punctuation/number removal, stopwords, WordNet lemmatisation, Porter stemming. Pipelines only normalise by default, so cased models keep their casing. |
+| **Utilities** | Classification and NER metrics, Flesch readability, chunking with overlap, batching. |
+| **Save, load, CLI** | `pipeline.save(dir)` / `Pipeline.load(dir)` restore weights and preprocessing offline; `lingo run <task>` from the shell. |
+| **Typed** | Ships `py.typed`; mypy-clean; typed exceptions in `lingo.exceptions`. |
 
-- **One interface for six tasks**: `Pipeline(task=..., model=...)` works the same way for every task, accepts a string or a list, and returns one result per input.
-- **Any Hub model**: pass any compatible model id or local path; Lingo handles tokenizer/model loading and device placement (`auto` picks CUDA, Apple MPS or CPU).
-- **Works on transformers 4.x and 5.x**: question answering and summarization are implemented directly on the model classes, so they keep working after transformers 5 removed those pipelines.
-- **Classic preprocessing included**: Unicode normalization, cleaning, stopwords, lemmatization and stemming via `TextPreprocessor`.
-- **Save/load and CLI**: persist a pipeline (weights + config) to disk and run any task from the `lingo` command.
-
----
-
-## **🚀 Quick Start**
-
-### **Installation**
+## Install
 
 ```bash
-# One-command installation (recommended)
 pip install lingo-nlp-toolkit
-
-# Optional extras
-pip install "lingo-nlp-toolkit[api]"       # FastAPI + uvicorn for serving a pipeline
-pip install "lingo-nlp-toolkit[examples]"  # pandas, used by the scripts in examples/
-pip install "lingo-nlp-toolkit[full]"      # api + examples + document/visualization helpers
-pip install "lingo-nlp-toolkit[gpu]"       # torchvision / torchaudio
-pip install "lingo-nlp-toolkit[dev]"       # pytest, ruff, build, twine
-
-# Optional: spaCy English model (used by TextPreprocessor for word tokenization if present)
-python -m spacy download en_core_web_sm
+# or
+uv pip install lingo-nlp-toolkit
 ```
 
-**Auto-setup**: required NLTK data is downloaded on first use, and Hugging Face models are downloaded and cached the first time you load them. Run `lingo setup` to fetch everything up front.
+Requires Python 3.10+. PyTorch is a dependency; on CPU-only machines you can install the smaller
+CPU wheel first with `pip install torch --index-url https://download.pytorch.org/whl/cpu`.
 
-Requires Python 3.10+.
+| Extra | Adds |
+| --- | --- |
+| `[api]` | FastAPI and uvicorn, for serving a pipeline |
+| `[examples]` | pandas |
+| `[full]` | api + examples + document and visualisation helpers |
+| `[gpu]` | torchvision, torchaudio |
+| `[dev]` | pytest, pytest-cov, ruff, mypy, pre-commit, build, twine |
 
-**📦 PyPI Package**: [lingo-nlp-toolkit on PyPI](https://pypi.org/project/lingo-nlp-toolkit/#files)
+Models are downloaded from the Hugging Face Hub and cached the first time they are used. NLTK
+data used by `TextPreprocessor` is fetched automatically on first use. `lingo setup` downloads
+NLTK data, the spaCy `en_core_web_sm` model and four common models up front.
 
-### **Examples & Use Cases**
+## Quickstart
 
-```bash
-# Basic usage
-python examples/basic_usage.py
-
-# Advanced real-world applications
-python examples/advanced_use_cases.py
-
-# Enterprise-grade NLP workflows
-python examples/enterprise_nlp.py
-
-# Capability showcase
-python examples/showcase.py
-
-# Interactive demo
-python demo.py
-```
-
-### **First Steps**
+Needs network on the first run (downloads about 500 MB per model); later runs work offline.
 
 ```python
 from lingo import Pipeline
 
-# Create a sentiment analysis pipeline
-nlp = Pipeline(task="sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest")
+sentiment = Pipeline(task="sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest")
+print(sentiment("I absolutely love the new update!"))
+# {'label': 'positive', 'score': 0.989...}
 
-# Run inference
-text = "I absolutely love the new product update!"
-result = nlp(text)
-print(result)
-# Output: {'label': 'positive', 'score': 0.99...}
+ner = Pipeline(task="ner", model="dslim/bert-base-NER", aggregation_strategy="first")
+for entity in ner("Tim Cook announced the new iPhone at Apple Park in Cupertino."):
+    print(entity["word"], entity["entity_group"], round(entity["score"], 2))
+# Tim Cook PER 1.0 / iPhone MISC 0.98 / Apple Park LOC 1.0 / Cupertino LOC 1.0
+
+qa = Pipeline(task="question-answering", model="deepset/roberta-base-squad2")
+print(qa(question="Who created Python?",
+         context="Python was created by Guido van Rossum and first released in 1991."))
+# {'score': 0.989..., 'start': 22, 'end': 38, 'answer': 'Guido van Rossum'}
 ```
 
-### **Command Line Usage**
+The outputs above are from a run on transformers 5.22; scores vary slightly across versions and
+devices.
+
+From the shell:
 
 ```bash
-# Sentiment analysis
 lingo run sentiment-analysis --model cardiffnlp/twitter-roberta-base-sentiment-latest --text "I love this product!"
-# {"label": "positive", "score": 0.98...}
-
-# Question answering (the input text is the context)
+# {"label": "positive", "score": 0.984...}
 lingo run question-answering --model deepset/roberta-base-squad2 \
   --question "Who created Python?" --text "Python was created by Guido van Rossum in 1991."
-# {"score": 0.97..., "start": 22, "end": 38, "answer": "Guido van Rossum"}
-
-# List available models
-lingo list-models
-
-# Download a model
-lingo download-model --model bert-base-uncased
-
-# Show the installed version
-lingo --version
+# {"score": 0.977..., "start": 22, "end": 38, "answer": "Guido van Rossum"}
 ```
 
----
+## How it works
 
-## **✨ Key Features**
-
-### **1. Text Preprocessing & Normalization**
-
-- ✅ Unicode normalization (NFC/NFD)
-- ✅ Lowercasing, punctuation removal, special character stripping
-- ✅ Stopword removal (multi-language support)
-- ✅ Lemmatization & stemming
-- ✅ Word & sentence tokenization (spaCy when available, otherwise NLTK)
-- ✅ Contraction and slang expansion
-
-### **2. Core NLP Tasks**
-
-- ✅ **Text Classification** - any sequence-classification model
-- ✅ **Named Entity Recognition (NER)** - token classification, with optional entity grouping
-- ✅ **Sentiment Analysis** - binary, ternary or fine-grained, depending on the model
-- ✅ **Text Embeddings** - sentence-transformers models, plus cosine similarity
-- ✅ **Question Answering** - extractive, with long contexts split into overlapping windows
-- ✅ **Text Summarization** - abstractive (BART, T5, Pegasus, ...)
-
-### **3. Hugging Face Integration**
-
-- ✅ Load any model from the Hugging Face Hub or a local directory
-- ✅ Extra keyword arguments are forwarded to the underlying Hugging Face pipeline
-- ✅ Save a pipeline (weights + config) and load it back offline
-
-### **4. Performance**
-
-- ✅ Automatic device selection: CUDA, Apple Silicon (MPS) or CPU
-- ✅ Batched inference with `batch_predict`
-- ✅ Evaluation helpers for classification and NER
-
----
-
-## **📚 Comprehensive Examples**
-
-### **Text Classification**
-
-```python
-from lingo import Pipeline
-
-# Create classifier
-classifier = Pipeline(task="text-classification", model="bert-base-uncased")
-
-# Classify texts
-texts = [
-    "This is a positive review about the product.",
-    "I'm not satisfied with the service quality.",
-    "The product meets my expectations.",
-]
-
-results = classifier(texts)
-for text, result in zip(texts, results):
-    print(f"{text[:30]}... → {result['label']}")
-
-# Note: bert-base-uncased has no fine-tuned classification head, so its labels
-# (LABEL_0/LABEL_1) are not meaningful. Use a fine-tuned model for real predictions,
-# e.g. "distilbert-base-uncased-finetuned-sst-2-english".
+```mermaid
+flowchart TD
+    A["Pipeline(task, model, config, device)"] --> D["Device: auto -> cuda / mps / cpu"]
+    A --> P["TextPreprocessor<br/>DEFAULT_PREPROCESSING + config['preprocessing']"]
+    A --> T{SUPPORTED_TASKS}
+    T -->|text-classification / ner / sentiment-analysis| H["AutoTokenizer + AutoModelFor*<br/>wrapped in transformers.pipeline<br/>(extra kwargs forwarded)"]
+    T -->|embedding| S["SentenceTransformer.encode<br/>+ cosine similarity"]
+    T -->|question-answering| Q["AutoModelForQuestionAnswering<br/>sliding windows (max_seq_len, doc_stride)<br/>best start/end span, char offsets"]
+    T -->|summarization| G["AutoModelForSeq2SeqLM.generate<br/>task prefix + generation defaults from config"]
+    C["pipeline(text or list)"] --> W[Wrap str as list] --> P2[Preprocess each text] --> M[Model call] --> U["Unwrap: str in, one result out"]
+    A -. save / load .-> F["pipeline_config.json<br/>model/ (weights)<br/>preprocessor/"]
 ```
 
-### **Named Entity Recognition**
+Design decisions:
 
-```python
-# Create NER pipeline
-ner = Pipeline(task="ner", model="dslim/bert-base-NER")
+- **Minimal default preprocessing.** Pipelines normalise Unicode and whitespace only; lowercasing
+  or punctuation removal before a transformer hurts cased models (most NER models), so those are
+  opt-in via `config={"preprocessing": {...}}`.
+- **Own QA and summarization loops.** Rather than depending on pipelines that transformers 5
+  removed, QA scores every valid (start, end) span inside each context window and returns the
+  best one with character offsets; summarization calls `generate` with the model's own
+  task-specific defaults (for example T5's `"summarize: "` prefix).
+- **Always a list internally.** Every model call works on lists and the `Pipeline` unwraps single
+  inputs, which keeps batching and return types consistent across tasks.
+- **Offline-friendly persistence.** `Pipeline.load` prefers the saved weights over the Hub id, and
+  `device=` can override the saved device when moving between machines.
 
-# Extract entities
-text = "Apple Inc. is headquartered in Cupertino, California. Tim Cook is the CEO."
-entities = ner(text)
+## Use cases and recipes
 
-for entity in entities:
-    print(f"Entity: {entity['entity']}, Type: {entity['word']}, Score: {entity['score']:.3f}")
+| Script | What it shows | Needs |
+| --- | --- | --- |
+| [`text_toolkit_offline.py`](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/examples/text_toolkit_offline.py) | Review cleaning, lemmas, Flesch readability, chunking and classifier metrics. | No model; NLTK data on first run |
+| [`support_ticket_triage.py`](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/examples/support_ticket_triage.py) | Sentiment + NER to prioritise angry tickets that name companies or places. | Two models (~930 MB) on first run |
+| [`semantic_faq_search.py`](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/examples/semantic_faq_search.py) | Map free-text questions to FAQ entries with embeddings and a hand-off threshold. | all-MiniLM-L6-v2 (~90 MB) |
+| [`document_qa_and_summary.py`](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/examples/document_qa_and_summary.py) | Answer questions about a policy with exact source spans, then summarise it. | roberta-base-squad2 + bart-large-cnn (~2.1 GB) |
 
-# Output:
-# Entity: B-LOC, Type: cup, Score: 0.940
-# Entity: B-LOC, Type: ##ert, Score: 0.671
-# Entity: I-LOC, Type: ##ino, Score: 0.437
-# Entity: B-LOC, Type: ca, Score: 0.506
+```bash
+git clone https://github.com/irfanalidv/lingo-nlp-toolkit && cd lingo-nlp-toolkit
+pip install -e .
+python examples/text_toolkit_offline.py
 ```
 
-### **Sentiment Analysis**
+<details>
+<summary><b>More snippets: embeddings, summarization, preprocessing, metrics</b></summary>
 
 ```python
-# Create sentiment analyzer
-sentiment = Pipeline(
-    task="sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest"
-)
-
-# Analyze sentiment
-texts = [
-    "I love this amazing product!",
-    "This is terrible, worst purchase ever.",
-    "It's okay, nothing special.",
-]
-
-results = sentiment(texts)
-for text, result in zip(texts, results):
-    print(f"{text[:30]}... → {result['label']} ({result['score']:.3f})")
-
-# Output:
-# I love this amazing product!... → positive (0.986)
-# This is terrible, worst purcha... → negative (0.941)
-# It's okay, nothing special.... → neutral (0.599)
-```
-
-### **Text Embeddings & Similarity**
-
-```python
-# Create embedding pipeline
-embeddings = Pipeline(task="embedding", model="sentence-transformers/all-MiniLM-L6-v2")
-
-# Generate embeddings
-texts = [
-    "The cat is on the mat.",
-    "A cat is sitting on the mat.",
-    "The weather is beautiful today.",
-]
-
-embeds = embeddings(texts)
-
-# Calculate similarity
-from lingo.models import EmbeddingModel
-
-embedding_model = embeddings.model
-
-similarity = embedding_model.similarity(texts[0], texts[1])
-print(f"Similarity: {similarity:.3f}")
-
-# Output:
-# Similarity: 0.907
-```
-
-### **Question Answering**
-
-```python
-# Create QA pipeline
-qa = Pipeline(task="question-answering", model="deepset/roberta-base-squad2")
-
-# Answer questions
-context = """
-Python is a high-level programming language created by Guido van Rossum in 1991.
-It's known for its simplicity and readability, making it popular for beginners.
-Python is widely used in data science, machine learning, and web development.
-"""
-
-question = "Who created Python?"
-answer = qa(question=question, context=context)
-
-print(f"Q: {question}")
-print(f"A: {answer['answer']} (confidence: {answer['score']:.3f})")
-
-# Output:
-# Q: Who created Python?
-# A: Guido van Rossum (confidence: 0.98...)
-```
-
-### **Text Summarization**
-
-```python
-# Create summarization pipeline
-summarizer = Pipeline(task="summarization", model="facebook/bart-large-cnn")
-
-# Summarize long text
-long_text = """
-Artificial Intelligence (AI) has emerged as one of the most transformative technologies of the 21st century.
-It encompasses a wide range of capabilities including machine learning, natural language processing, computer vision,
-and robotics. AI systems can now perform tasks that were once thought to be exclusively human, such as recognizing
-speech, translating languages, making decisions, and solving complex problems.
-"""
-
-summary = summarizer(long_text, max_length=60, min_length=20)
-print(f"Summary: {summary['summary_text']}")
-
-# Output:
-# Summary: Artificial Intelligence has emerged as one of the most transformative technologies of the 21st century. It encompasses a wide range of capabilities including machine learning, natural language processing, computer vision, and robotics.
-```
-
----
-
-## **🔧 Advanced Usage**
-
-### **Custom Preprocessing**
-
-```python
-from lingo import TextPreprocessor
-
-# Configure preprocessing
-preprocessor = TextPreprocessor(
-    config={
-        "lowercase": True,
-        "remove_punctuation": True,
-        "remove_stopwords": True,
-        "lemmatize": True,
-        "use_spacy": True,
-        "spacy_model": "en_core_web_sm",
-    }
-)
-
-# Process text
-text = "The quick brown foxes are jumping over the lazy dogs! 🦊🐕"
-cleaned = preprocessor(text)
-print(f"Cleaned: {cleaned}")
-
-# Get detailed preprocessing results
-pipeline_result = preprocessor.get_preprocessing_pipeline(text)
-print(f"Words: {pipeline_result['words']}")
-print(f"Lemmatized: {pipeline_result['lemmatized']}")
-
-# Output:
-# Cleaned: the quick brown foxes are jumping over the lazy dogs
-# Words: ['the', 'quick', 'brown', 'foxes', 'are', 'jumping', 'over', 'the', 'lazy', 'dogs']
-# Lemmatized: ['the', 'quick', 'brown', 'fox', 'are', 'jumping', 'over', 'the', 'lazy', 'dog']
-# (pipeline_result["words_no_stopwords"] holds the words with stopwords removed)
-```
-
-### **Batch Processing**
-
-```python
-# Process large datasets efficiently
-texts = ["Text 1", "Text 2", "Text 3", ...]  # Large list
-
-# Batch processing
-results = pipeline.batch_predict(texts, batch_size=32)
-
-# Or use utility function
-from lingo.utils import batch_texts
-
-batches = batch_texts(texts, batch_size=32)
-```
-
-### **Model Evaluation**
-
-```python
+from lingo import Pipeline, TextPreprocessor
 from lingo.utils import evaluate_classification
 
-# Evaluate model performance
-y_true = ["positive", "negative", "positive", "neutral"]
-y_pred = ["positive", "negative", "positive", "positive"]
+emb = Pipeline(task="embedding", model="sentence-transformers/all-MiniLM-L6-v2")
+vector = emb("The cat is on the mat.")                      # list of 384 floats
+emb.model.similarity("The cat is on the mat.", "A cat is sitting on the mat.")  # 0.907
+emb.model.similarity("The cat is on the mat.", "The weather is beautiful today.")  # -0.002
 
-metrics = evaluate_classification(y_true, y_pred)
-print(f"Accuracy: {metrics['accuracy']:.3f}")
-print(f"F1 Score: {metrics['f1']:.3f}")
+summarizer = Pipeline(task="summarization", model="facebook/bart-large-cnn")
+summarizer(long_text, max_length=60, min_length=20)["summary_text"]
 
-# Output:
-# Accuracy: 0.750
-# F1 Score: 0.650   (weighted average)
+pre = TextPreprocessor(config={
+    "use_spacy": False, "lowercase": True, "expand_contractions": True,
+    "remove_punctuation": True, "remove_stopwords": True, "lemmatize": True,
+})
+steps = pre.get_preprocessing_pipeline("The foxes weren't jumping over the lazy dogs!")
+steps["cleaned"]                                     # 'the foxes were not jumping over the lazy dogs'
+pre.lemmatize_tokens(steps["words_no_stopwords"])    # ['fox', 'jumping', 'lazy', 'dog']
+
+evaluate_classification(["pos", "neg", "pos"], ["pos", "neg", "neg"])["accuracy"]  # 0.666...
 ```
 
-### **Pipeline Configuration**
+</details>
 
-```python
-# Load configuration from file
-import yaml
+<details>
+<summary><b>Serving a pipeline with FastAPI</b></summary>
 
-with open("config.yaml", "r") as f:
-    config = yaml.safe_load(f)
-
-# Create pipeline with custom config. The "preprocessing" section controls the
-# TextPreprocessor applied before inference. By default a Pipeline only normalizes
-# Unicode and whitespace (it does NOT lowercase, which would hurt cased models).
-pipeline = Pipeline(
-    task="sentiment-analysis",
-    model="cardiffnlp/twitter-roberta-base-sentiment-latest",
-    config=config,
-)
-```
-
----
-
-## **📁 Project Structure**
-
-```
-lingo/
-├── lingo/                    # Core package
-│   ├── __init__.py          # Main imports
-│   ├── core.py              # Pipeline class
-│   ├── preprocessing.py      # Text preprocessing
-│   ├── models.py            # NLP model classes
-│   ├── utils.py             # Utility functions
-│   ├── setup_utils.py       # `lingo setup` data/model downloads
-│   ├── cli.py               # Command-line interface
-│   └── configs/default.yaml # Default config
-├── examples/                # Usage examples
-├── tests/                   # Test suite (pytest)
-├── pyproject.toml           # Packaging metadata (single source of truth)
-└── README.md                # This file
-```
-
----
-
-## **⚡ Performance & Optimization**
-
-### **Device Selection**
-
-```python
-# Automatic device detection
-pipeline = Pipeline(task="sentiment-analysis", model="...", device="auto")
-
-# Manual device selection
-pipeline = Pipeline(task="sentiment-analysis", model="...", device="cuda")
-pipeline = Pipeline(task="sentiment-analysis", model="...", device="mps")  # Apple Silicon
-```
-
-### **Batch Processing**
-
-```python
-# Optimize for large datasets
-results = pipeline.batch_predict(texts, batch_size=64)
-```
-
-### **Memory Management**
-
-```python
-# Use mixed precision for faster inference
-pipeline = Pipeline(task="sentiment-analysis", model="...", config={"use_mixed_precision": True})
-```
-
----
-
-## **🔌 Integration & Extensibility**
-
-### **With Existing Libraries**
-
-```python
-# spaCy integration
-import spacy
-
-nlp = spacy.load("en_core_web_sm")
-
-# NLTK integration
-import nltk
-from nltk.tokenize import word_tokenize
-
-# scikit-learn integration
-from sklearn.metrics import classification_report
-```
-
-### **Custom Models**
-
-```python
-# Extend base model class
-from lingo.models import BaseModel
-
-
-class CustomModel(BaseModel):
-    def _load_model(self):
-        # Custom model loading logic
-        pass
-
-    def __call__(self, inputs, **kwargs):
-        # Custom inference logic
-        pass
-```
-
----
-
-## **🚀 Deployment & Production**
-
-### **Save & Load Pipelines**
-
-```python
-# Save pipeline
-pipeline.save("./saved_pipeline")
-
-# Load pipeline
-loaded_pipeline = Pipeline.load("./saved_pipeline")
-```
-
-### **REST API Template**
-
-Requires the `api` extra: `pip install "lingo-nlp-toolkit[api]"`.
+Requires `pip install "lingo-nlp-toolkit[api]"`.
 
 ```python
 from fastapi import FastAPI
+
 from lingo import Pipeline
 
 app = FastAPI()
-
-# Load pipeline
-pipeline = Pipeline.load("./saved_pipeline")
+pipeline = Pipeline.load("./saved_pipeline", device="cpu")
 
 
 @app.post("/analyze")
-async def analyze_text(text: str):
-    result = pipeline(text)
-    return {"result": result}
+def analyze(text: str) -> dict:
+    return {"result": pipeline(text)}
 ```
 
-### **Docker Deployment**
+Run with `uvicorn main:app`. Hugging Face pipelines are not guaranteed to be thread-safe; keep one
+pipeline per worker process.
 
-```dockerfile
-FROM python:3.12-slim
+</details>
 
-WORKDIR /app
-RUN pip install "lingo-nlp-toolkit[api]"
+## Configuration
 
-COPY . .
-EXPOSE 8000
+**`Pipeline` arguments**
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
+| Argument | Default | Meaning |
+| --- | --- | --- |
+| `task` | required | One of the six task names. |
+| `model` | required | Hub id or local directory. |
+| `device` | `"auto"` | `"auto"`, `"cpu"`, `"cuda"` or `"mps"`. |
+| `cache_dir` | HF default | Where downloaded models are cached. |
+| `config["preprocessing"]` | normalise Unicode + whitespace only | Any `TextPreprocessor` option below. |
+| `**kwargs` | | Forwarded to the Hugging Face pipeline (classification, NER, sentiment). |
 
----
+**`TextPreprocessor` options** (standalone defaults; `Pipeline` overrides `lowercase` and
+`use_spacy` to `False`)
 
-## **🧩 API Overview**
+| Option | Default | Option | Default |
+| --- | --- | --- | --- |
+| `normalize_unicode` (NFC) | `True` | `expand_contractions` | `False` |
+| `lowercase` | `True` | `expand_slang` | `False` |
+| `remove_punctuation` | `False` | `remove_stopwords` | `False` |
+| `remove_numbers` | `False` | `lemmatize` (WordNet) | `False` |
+| `remove_special_chars` | `False` | `stem` (Porter) | `False` |
+| `remove_extra_whitespace` | `True` | `use_spacy` / `spacy_model` | `True` / `"en_core_web_sm"` |
+
+`correct_spelling` and `use_subword_tokenization` are accepted but not implemented (the second
+logs a warning).
+
+**Environment variables** (read by Hugging Face libraries)
+
+| Variable | Effect |
+| --- | --- |
+| `HF_HOME` | Root of the Hugging Face cache. |
+| `HF_HUB_OFFLINE=1` | Never contact the Hub; use cached models only. |
+| `HF_TOKEN` | Access token for gated or private models. |
+
+## API overview
 
 | Object | What it does |
 | --- | --- |
-| `Pipeline(task, model, config=None, device="auto", cache_dir=None, **kwargs)` | Unified entry point. Tasks: `text-classification`, `ner`, `sentiment-analysis`, `embedding`, `question-answering`, `summarization`. Extra `kwargs` go to the Hugging Face pipeline (e.g. `aggregation_strategy`). |
-| `Pipeline.__call__(text_or_list, **kwargs)` | One result for a string, a list of results for a list. QA uses `nlp(question=..., context=...)`. |
-| `Pipeline.batch_predict(texts, batch_size=32)` | Batched inference, always returns a list. |
-| `Pipeline.save(path)` / `Pipeline.load(path)` | Persist and restore weights, preprocessing and config. |
-| `TextPreprocessor(config)` | Cleaning, normalization, tokenization, stopwords, lemmatization, stemming. |
-| `TextClassifier`, `NERModel`, `SentimentAnalyzer`, `EmbeddingModel`, `QuestionAnsweringModel`, `SummarizationModel` | Task model wrappers used by `Pipeline` (usable directly). |
-| `lingo.utils` | `evaluate_classification`, `evaluate_ner`, `clean_text`, `chunk_text`, `batch_texts`, `get_text_statistics`, `get_available_models`, `download_model`. |
+| `Pipeline(task, model, config=None, device="auto", cache_dir=None, **kwargs)` | Unified entry point; call with a string or list. QA uses `nlp(question=..., context=...)`. |
+| `Pipeline.batch_predict(texts, batch_size=32)` | Batched inference; always returns a list. |
+| `Pipeline.save(path)` / `Pipeline.load(path, device=None)` | Persist and restore weights, preprocessing and config. |
+| `Pipeline.get_info()` | Task, model, device and config. |
+| `TextPreprocessor(config, language="english")` | Cleaning, tokenisation, stopwords, lemmatisation, stemming; `get_preprocessing_pipeline(text)` returns every stage. |
+| `TextClassifier`, `NERModel`, `SentimentAnalyzer`, `EmbeddingModel`, `QuestionAnsweringModel`, `SummarizationModel` | Task wrappers used by `Pipeline`; usable directly. `EmbeddingModel.similarity(a, b)` gives cosine similarity. |
+| `lingo.utils` | `evaluate_classification`, `evaluate_ner`, `get_text_statistics`, `chunk_text`, `clean_text`, `batch_texts`, `get_available_models`, `download_model`, `download_file`, `load_model`, `save_model`. |
+| `lingo.exceptions` | `LingoError`, `UnsupportedTaskError`, `InvalidInputError` (both also `ValueError`). |
+| `lingo` CLI | `lingo run <task>`, `lingo list-models`, `lingo download-model`, `lingo setup`, `lingo --version`. |
 
-## **⚙️ Configuration & Environment**
+## Research and references
 
-- `device`: `"auto"` (default), `"cpu"`, `"cuda"` or `"mps"`.
-- `cache_dir`: where Hugging Face models are cached (default: the standard HF cache; `HF_HOME` is respected).
-- `HF_HUB_OFFLINE=1`: run fully offline once models are cached.
-- `HF_TOKEN`: needed only for gated/private Hub models.
-- `lingo setup` downloads the spaCy English model, NLTK data and a few common models; its marker file lives in `~/.lingo_cache/`.
+- Extractive QA span selection over overlapping windows follows the SQuAD fine-tuning setup in
+  Devlin, J., Chang, M.-W., Lee, K. & Toutanova, K. (2019). BERT: Pre-training of Deep
+  Bidirectional Transformers for Language Understanding. *NAACL-HLT 2019*.
+- The embedding task uses the sentence-transformers library: Reimers, N. & Gurevych, I. (2019).
+  Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. *EMNLP-IJCNLP 2019*.
+- `get_text_statistics` computes the Flesch Reading Ease score (with an approximate syllable
+  count): Flesch, R. (1948). A new readability yardstick. *Journal of Applied Psychology*, 32(3),
+  221-233.
+- Stemming uses NLTK's Porter stemmer: Porter, M. F. (1980). An algorithm for suffix stripping.
+  *Program*, 14(3), 130-137.
 
----
+## When to use it
 
-## **🤝 Contributing**
+Lingo suits scripts, notebooks and small services that need several standard NLP tasks with one
+consistent interface and offline save/load. If you need a single task with full control over
+batching, quantisation or serving, `transformers.pipeline` (or a dedicated inference server) is
+lighter. For linguistic annotation pipelines (parsing, rule-based matching), use spaCy directly;
+Lingo only uses it for tokenisation.
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+## Roadmap
 
-### **Development Setup**
+- Make spaCy and NLTK optional extras to slim the default install.
+- Implement `load_model` for standalone model directories (currently `NotImplementedError`).
+- Batched QA across several question/context pairs.
 
-```bash
-# Clone repository
-git clone https://github.com/irfanalidv/lingo-nlp-toolkit.git
-cd lingo-nlp-toolkit
+## Contributing, security, citation, license
 
-# Install in development mode
-pip install -e .[dev]
-
-# Run tests
-pytest
-
-# Lint and format
-ruff check .
-ruff format .
-```
-
----
-
-## **📄 License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## **🙏 Acknowledgments**
-
-- **Hugging Face** for the amazing transformers library
-- **spaCy** for excellent NLP tools
-- **NLTK** for foundational NLP capabilities
-- **PyTorch** for deep learning framework
-- **scikit-learn** for machine learning utilities
-
----
-
-## **📞 Support & Community**
-
-- **Documentation**: [GitHub Repository](https://github.com/irfanalidv/lingo-nlp-toolkit)
-- **Issues**: [GitHub Issues](https://github.com/irfanalidv/lingo-nlp-toolkit/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/irfanalidv/lingo-nlp-toolkit/discussions)
-
----
-
-## **⭐ Star History**
-
-[![Star History Chart](https://api.star-history.com/svg?repos=irfanalidv/lingo-nlp-toolkit&type=Date)](https://star-history.com/#irfanalidv/lingo-nlp-toolkit&Date)
-
----
-
-**Made with ❤️ by Md Irfan Ali**
+- Contributing: see [CONTRIBUTING.md](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CONTRIBUTING.md)
+  (`ruff`, `mypy` and `pytest --cov` must pass; tests run offline with faked models).
+- Security: report vulnerabilities as described in
+  [SECURITY.md](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/SECURITY.md).
+- Changelog: [CHANGELOG.md](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CHANGELOG.md).
+- Citation: cite the software via
+  [CITATION.cff](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/CITATION.cff) (GitHub's
+  "Cite this repository" button reads it).
+- License: MIT, see [LICENSE](https://github.com/irfanalidv/lingo-nlp-toolkit/blob/main/LICENSE).
