@@ -54,7 +54,7 @@ classifiers = [
 ]
 dependencies = [
     "torch>=2.0",
-    "transformers>=4.30",
+    "transformers>=5.20.2",
     "sentence-transformers>=2.2.0",
     "spacy>=3.5.0",
     "nltk>=3.8",
